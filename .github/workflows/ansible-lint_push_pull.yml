@@ -1,0 +1,11 @@
+
+name: GitHub automations ansible-lint for best practice
+on: [push, pull_request]   # the list of conditions on which our automation triggers
+jobs:
+  AnsibleLint:
+    runs-on: ubuntu-latest     # name of a container (environment) to run your automations in
+    steps:
+      - name: check code out from github into "ubuntu-latest"
+        uses: actions/checkout@v4
+      - name: run ansible lint
+        uses: ansible/ansible-lint@main
