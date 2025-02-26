@@ -21,7 +21,7 @@ host_name_initiator:
 
 # host group name
 hostgroup_name: 'Ansible_Cluster_2_HG'
-  
+
 # port group name
 portgroup_name: 'Ansible_Cluster_2_PG'
 
