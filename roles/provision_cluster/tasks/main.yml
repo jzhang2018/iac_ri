@@ -18,6 +18,19 @@
       verifycert: "{{ verifycert }}"
       serial_no: "{{ serial_no }}"
 
+#### Create Initiator Group ####
+# - name: Create Initiator Group
+#   collections:
+#     - dellemc.powermax
+#   dellemc.powermax.initiator:
+#     <<: *uni_connection_vars
+#     initiators: "{{ host1_initiators }}"
+#     new_alias:
+#       new_node_name: "{{ node_name }}"
+#       new_port_name: "{{ port_name }}"
+# 	  state: "present"
+#   register: initiator
+
 ##### Create Storage Group #####
 - name: Create Storage Group
   collections:
@@ -26,7 +39,7 @@
     <<: *uni_connection_vars
     sg_name: "{{ sg_name }}"
     # service_level: "Bronze" # TODO as Dell lab gives error
-    state: "present"
+    state: 'present'
   register: new_sg
 
 - name: Print out new created storage group
@@ -80,7 +93,7 @@
   dellemc.powermax.hostgroup:
     <<: *uni_connection_vars
     hostgroup_name: "{{ hostgroup_name }}"
-    state: "present"
+    state: 'present'
     hosts: "{{ host_name_initiator | map(attribute='host_name') | list }}"
     host_state: 'present-in-group'
     host_flags:
@@ -99,7 +112,7 @@
   dellemc.powermax.portgroup:
     <<: *uni_connection_vars
     portgroup_name: "{{ portgroup_name }}"
-    state: "present"
+    state: 'present'
     ports: "{{ port_list }}"
     port_group_protocol: "SCSI_FC"
     port_state: 'present-in-group'
