@@ -1,0 +1,129 @@
+---
+
+# tasks file for provision_cluster
+# Tesla workflow: create storage group -> create volumes -> create host(s) -> create host group(s) ->
+#   create port group -> Create MV with existing elements
+
+- name: Debug - Declaration
+  ansible.builtin.debug:
+    msg: "+++ Provision Cluster +++"
+
+- name: Set unisphere common connection
+  ansible.builtin.set_fact:
+    uni_connection_vars: &uni_connection_vars
+      unispherehost: "{{ unispherehost }}"
+      universion: "{{ universion }}"
+      user: "{{ user }}"
+      password: "{{ password }}"
+      verifycert: "{{ verifycert }}"
+      serial_no: "{{ serial_no }}"
+
+##### Create Storage Group #####
+- name: Create Storage Group
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.storagegroup:
+    <<: *uni_connection_vars
+    sg_name: "{{ sg_name }}"
+    # service_level: "Bronze" # TODO as Dell lab gives error
+    state: "present"
+  register: new_sg
+
+- name: Print out new created storage group
+  ansible.builtin.debug:
+    msg: "{{ new_sg }}"
+  when: debug_mode | default(false)
+
+##### Create Volumes ####
+- name: Create Volumes
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.volume:
+    <<: *uni_connection_vars
+    vol_name: "{{ vol_name + '_' }}{{ item }}"
+    sg_name: "{{ sg_name }}"
+    size: 1
+    cap_unit: "GB"
+    state: 'present'
+  loop: "{{ range(1, 3 + 1, 1) | list }}" # 1, 2, 3
+  register: volumes
+
+- name: Print out new created valumes
+  ansible.builtin.debug:
+    msg: "{{ volumes }}"
+  when: debug_mode | default(false)
+
+#### Create Hosts ####
+- name: Create Hosts
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.host:
+    <<: *uni_connection_vars
+    host_name: "{{ item.host_name }}"
+    initiators: "{{ item.host_initiators }}"
+    host_flags:
+      consistent_lun: true
+    state: 'present'
+    initiator_state: 'present-in-host'
+  loop: "{{ host_name_initiator }}"
+  register: new_hosts
+
+- name: Print out new created hosts
+  ansible.builtin.debug:
+    msg: "{{ new_hosts }}"
+  when: debug_mode | default(false)
+
+#### Create Host Group ####
+- name: Create Host Group
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.hostgroup:
+    <<: *uni_connection_vars
+    hostgroup_name: "{{ hostgroup_name }}"
+    state: "present"
+    hosts: "{{ host_name_initiator | map(attribute='host_name') | list }}"
+    host_state: 'present-in-group'
+    host_flags:
+      consistent_lun: true
+  register: host_group
+
+- name: Print out new created host group
+  ansible.builtin.debug:
+    msg: "{{ host_group }}"
+  when: debug_mode | default(false)
+
+#### Create Port Group ####
+- name: Create Port Group
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.portgroup:
+    <<: *uni_connection_vars
+    portgroup_name: "{{ portgroup_name }}"
+    state: "present"
+    ports: "{{ port_list }}"
+    port_group_protocol: "SCSI_FC"
+    port_state: 'present-in-group'
+  register: port_group
+
+- name: Print out new created port group
+  ansible.builtin.debug:
+    msg: "{{ port_group }}"
+  when: debug_mode | default(false)
+
+#### Create Masking View ####
+- name: Create Masking View
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.maskingview:
+    <<: *uni_connection_vars
+    mv_name: "{{ mv_name }}"
+    portgroup_name: "{{ portgroup_name }}"
+    hostgroup_name: "{{ hostgroup_name }}"
+    sg_name: "{{ sg_name }}"
+    state: 'present'
+  register: mv
+
+- name: Print out new created MV
+  ansible.builtin.debug:
+    msg: "{{ mv }}"
+  when: debug_mode | default(false)
