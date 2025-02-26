@@ -5,7 +5,7 @@ ansible_python_interpreter: '/usr/bin/python3.11'
 
 unispherehost: "10.60.8.152"
 universion: "101"
-verifycert: False
+verifycert: false
 user: "smc"
 password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
