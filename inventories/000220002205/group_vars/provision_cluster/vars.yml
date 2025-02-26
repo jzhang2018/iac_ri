@@ -23,14 +23,14 @@ host_name_initiator:
 hostgroup_name: 'Ansible_Cluster_2_HG'
 
 # port group name
-portgroup_name: 'Ansible_Cluster_2_PG'
+portgroup_name: 'Ansible_Cluster_2_PG2'
 
 # port list
 port_list:
   - director_id: OR-1C
-    port_id: 3
+    port_id: 4
   - director_id: OR-2C
-    port_id: 3
+    port_id: 4
 
 # masking view name
 mv_name: Ansible_Cluster_2_MV
