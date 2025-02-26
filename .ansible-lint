@@ -7,4 +7,4 @@
 exclude_paths:
   - .github/  # github workflow files
   - .ansible-lint
-  - playbook/roles/*/tests/test.yml
+  - /roles/*/tests/test.yml
