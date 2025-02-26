@@ -1,7 +1,7 @@
 ---
 
 # tasks file for provision_cluster
-# Tesla workflow: create storage group -> create volumes -> create host(s) -> create host group(s) ->
+# Tesla workflow: create initiator group -> create storage group -> create volumes -> create host(s) -> create host group(s) ->
 #   create port group -> Create MV with existing elements
 
 - name: Debug - Declaration
@@ -24,11 +24,12 @@
 #     - dellemc.powermax
 #   dellemc.powermax.initiator:
 #     <<: *uni_connection_vars
-#     initiators: "{{ host1_initiators }}"
+#     # initiators: "{{ item.host_initiators }}"
 #     new_alias:
 #       new_node_name: "{{ node_name }}"
 #       new_port_name: "{{ port_name }}"
-# 	  state: "present"
+# 	  state: 'present'
+#   loop: "{{ host_name_initiator }}"
 #   register: initiator
 
 ##### Create Storage Group #####
