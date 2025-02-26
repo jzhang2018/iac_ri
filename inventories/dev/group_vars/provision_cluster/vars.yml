@@ -13,7 +13,7 @@ host_name_initiator:
   - host_name: 'Ansible_Cluster_Host3_IG'
     host_initiators:
       - '10000000c99ffaee'
-      - '10000000c99ffaef' 
+      - '10000000c99ffaef'
   - host_name: "Ansible_Cluster_Host4_IG"
     host_initiators:
       - '10000000c99ffffe'
