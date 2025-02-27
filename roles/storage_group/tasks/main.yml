@@ -1,0 +1,21 @@
+---
+# tasks file for storage_group
+- name: "Storage Group Operation - {{ state }}"
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.storagegroup:
+    unispherehost: "{{ unispherehost }}"
+    universion: "{{ universion }}"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    verifycert: "{{ verifycert }}"
+    serial_no: "{{ serial_no }}"
+    sg_name: "{{ sg_name }}"
+    # service_level: "Bronze" # TODO as Dell lab gives error
+    state: "{{ state }}"
+  register: sg
+
+- name: Print out storage group
+  ansible.builtin.debug:
+    msg: "{{ sg }}"
+  when: debug_mode | default(false)
