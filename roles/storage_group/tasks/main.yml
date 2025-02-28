@@ -1,6 +1,6 @@
 ---
 # tasks file for storage_group
-- name: "Storage Group Operation - {{ state }}"
+- name: "Storage Group Operation"
   collections:
     - dellemc.powermax
   dellemc.powermax.storagegroup:
@@ -12,7 +12,7 @@
     serial_no: "{{ serial_no }}"
     sg_name: "{{ sg_name }}"
     # service_level: "Bronze" # TODO as Dell lab gives error
-    state: "{{ state }}"
+    state: "{{ state | default('present') }}"
   register: sg
 
 - name: Print out storage group
