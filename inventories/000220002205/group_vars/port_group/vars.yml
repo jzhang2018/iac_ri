@@ -1,0 +1,10 @@
+---
+# port group name
+portgroup_name: 'Ansible_Cluster_PG3'
+
+# port list
+ports:
+  - director_id: 'OR-1C'
+    port_id: '4'
+  - director_id: 'OR-2C'
+    port_id: '4'
