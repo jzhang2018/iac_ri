@@ -11,19 +11,10 @@
       serial_no: "{{ serial_no }}"
 
 #### Creat Storage Group Operation ####
-- name: "Creat Storage Group - create a new storage group and add existing volumnes to it"
+- name: Creat Storage Group
   when: state == 'present'
   block:
-    - name: Create Empty Storage Group
-      collections:
-        - dellemc.powermax
-      dellemc.powermax.storagegroup:
-        <<: *uni_connection_vars
-        sg_name: "{{ sg_name }}"
-        # service_level: "Bronze" # TODO as Dell lab gives error
-        state: 'present'
-
-    - name: Add Volumnes to the Storage Group
+    - name: Create a new storage group and add existing volumnes to it
       collections:
         - dellemc.powermax
       dellemc.powermax.storagegroup:
@@ -41,7 +32,7 @@
       when: debug_mode | default(false)
 
 #### Remove Storage Group Operation ####
-- name: "Remove Storage Group - remove existing volumnes from the storage group and then delete the storage group"
+- name: Remove Storage Group - remove existing volumnes from the storage group and then delete the storage group
   when: state == 'absent'
   block:
     - name: Remove Volumnes from the Storage Group
