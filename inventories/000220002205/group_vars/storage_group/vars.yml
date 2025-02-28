@@ -1,4 +1,10 @@
 ---
 
 # storage group name
-sg_name: 'pmax1_jw-2025-2'
+sg_name: 'pmax1_jw-2025-3'
+
+# volumne id
+volumes:
+  - vol_id: '00107'
+  - vol_id: '00102'
+  - vol_id: '0010A'
