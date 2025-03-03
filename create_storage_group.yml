@@ -1,8 +1,8 @@
 ---
 - name: Storage Group Play
-  hosts: storage_group
+  hosts: create_storage_group
   connection: local
   gather_facts: false
 
   roles:
-    - storage_group
+    - create_storage_group

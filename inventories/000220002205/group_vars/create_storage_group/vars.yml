@@ -1,0 +1,7 @@
+---
+
+# storage group name
+sg_name: 'POD5-DT6_SG'
+
+# volume count
+volume_count: 6
