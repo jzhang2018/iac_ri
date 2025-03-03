@@ -46,7 +46,7 @@
         volumes: "{{ volumes }}"
         vol_state: "absent-in-group"
 
-    - name: Remove Empty Storage Group
+    - name: Delete Empty Storage Group
       collections:
         - dellemc.powermax
       dellemc.powermax.storagegroup:

@@ -9,8 +9,8 @@
       password: "{{ password }}"
       verifycert: "{{ verifycert }}"
       serial_no: "{{ serial_no }}"
-      
-#### Creat Port Group Operation ####
+
+#### Create Port Group Operation ####
 - name: Create Port Group
   when: state == 'present'
   block:
@@ -46,7 +46,7 @@
         ports: "{{ ports }}"
         port_state: "absent-in-group"
 
-    - name: Remove Empty Port Group
+    - name: Delete Empty Port Group
       collections:
         - dellemc.powermax
       dellemc.powermax.portgroup:
