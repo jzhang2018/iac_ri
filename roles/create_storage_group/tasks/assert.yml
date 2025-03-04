@@ -1,0 +1,33 @@
+---
+
+# Assertion gets called when a new storage group is created with newly created volumes defined in inventory
+- name: Get newly created storage group details including volumes
+  dellemc.powermax.storagegroup:
+    unispherehost: "{{ unispherehost }}"
+    universion: "{{ universion }}"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    verifycert: "{{ verifycert }}"
+    serial_no: "{{ serial_no }}"
+    sg_name: "{{ sg_name }}"
+    state: "present"
+  register: assert_sg
+
+- name: Print out newly created storage group details including volumes
+  ansible.builtin.debug:
+    msg: "{{ assert_sg }}"
+  when: debug_mode | default(false)
+
+# - name: Print out volumes
+#   ansible.builtin.debug:
+#     msg: "{{ assert_sg }}"
+#   when: debug_mode | default(false)
+
+- name: Assert - storage group with volumes
+  ansible.builtin.assert:
+    that:
+      - "sg_name == assert_sg.storage_group_details.storageGroupId"
+    success_msg: "++++++ Storage group {{ sg_name }} with {{ volume_count }} volumes creation verification PASSED! ++++++ "
+    msg:
+      - "xxxxxx Storage group {{ sg_name }} with {{ volume_count }} volumes creation verification DID NOT PASS! xxxxxx"
+      - "storage group name: {{ sg_name }} != {{ assert_sg.storage_group_details.storageGroupId }}"
