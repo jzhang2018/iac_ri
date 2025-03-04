@@ -1,5 +1,5 @@
 ---
-# tasks file for port_group
+# tasks file for create_port_group
 - name: Set unisphere common connection
   ansible.builtin.set_fact:
     uni_connection_vars: &uni_connection_vars
