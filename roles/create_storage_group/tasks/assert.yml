@@ -36,6 +36,7 @@
   ansible.builtin.assert:
     that: "{{ item.condition }}"
     fail_msg: "{{ item.msg }}"
+    success_msg: "This assertion passed!"
   loop:
     - { condition: "sg_name == assert_sg.storage_group_details.storageGroupId", msg: "storage group name does not match expected value" }
     - { condition: "volume_count == assert_sg.storage_group_details.num_of_vols", msg: "volume count does not match expected value" }

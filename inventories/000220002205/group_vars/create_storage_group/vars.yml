@@ -1,10 +1,10 @@
 ---
 
 # storage group name
-sg_name: 'POD5-DT7_SG'
+sg_name: 'POD5-DT8_SG'
 
 # volume count
-volume_count: 4
+volume_count: 5
 
 # size in GB for all the new volumes
 size: 16
