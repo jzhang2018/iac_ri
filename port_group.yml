@@ -1,8 +1,0 @@
----
-- name: Port Group Play
-  hosts: port_group
-  connection: local
-  gather_facts: false
-
-  roles:
-    - port_group
