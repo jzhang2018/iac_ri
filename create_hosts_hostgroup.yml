@@ -1,0 +1,9 @@
+---
+- name: Create hosts and hostgroup play
+  hosts: create_hosts_hostgroup
+  connection: local
+  gather_facts: false
+
+  roles:
+    - gather_vcenter_cluster_info
+    - create_hosts_hostgroup

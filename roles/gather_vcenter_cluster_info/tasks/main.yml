@@ -1,0 +1,24 @@
+---
+# tasks file for gather_cluster_info
+- name: Gather Cluster Information
+  vmware.vmware.cluster_info:
+    hostname: '10.60.20.40'
+    username: 'administrator@vsphere.local'
+    password: 'Ctcvmware1!'
+    validate_certs: false
+    cluster_name: 'Cluster1'
+  register: cluster_info
+
+- name: Print out cluster info
+  ansible.builtin.debug:
+    msg: "{{ cluster_info }}"
+  when: debug_mode | default(false)
+
+- name: Set variable cluster_details (for other roles to use)
+  ansible.builtin.set_fact:
+    cluster_details: "{{ cluster_info.clusters }}"
+
+- name: Print out cluster details
+  ansible.builtin.debug:
+    msg: "{{ cluster_details }}"
+  when: debug_mode | default(false)

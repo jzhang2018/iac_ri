@@ -1,0 +1,8 @@
+---
+- name: Gather cluster info play
+  hosts: gather_cluster_info
+  connection: local
+  gather_facts: false
+
+  roles:
+    - gather_cluster_info

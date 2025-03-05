@@ -1,7 +1,7 @@
 ---
 # tasks file for create_storage_group
-# workflow: user provides storage group name and the count of volumes -> create empty storgare group
-#   -> create volumes based on the naming convention and the count requested
+# workflow: user provides storage group name and the index of volumes -> create empty storgare group
+#   -> create volumes based on the naming convention and the index requested
 #   -> add newly created volumes to the storage group
 
 - name: Set unisphere common connection
@@ -30,9 +30,9 @@
     - dellemc.powermax
   dellemc.powermax.volume:
     <<: *uni_connection_vars
-    vol_name: "{{ cluster_name + '_Data.' }}{{ item }}"
+    vol_name: "{{ cluster_name + '_DATA.' }}{{ item }}"
     sg_name: "{{ cluster_name }}_SG"  # Storage group name should be along with volume name
     size: "{{ size }}"
     cap_unit: 'TB'
     state: 'present'
-  loop: "{{ range(0, volume_count, 1) | list }}" # 0, 1, 2
+  loop: "{{ range(0, volume_index, 1) | list }}" # 0, 1, 2

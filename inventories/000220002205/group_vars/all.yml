@@ -3,6 +3,7 @@
 ansible_python_interpreter: '/usr/bin/python3.11'
 # ansible_user: ''
 
+# unisphere connection
 unispherehost: '10.60.8.152'
 universion: '101'
 verifycert: false
@@ -19,4 +20,16 @@ password: !vault |
 serial_no: '000220002205'
 
 # cluster name
-cluster_name: 'RI_Cluster3'
+cluster_name: 'RI_Cluster4'
+
+# vcenter connection
+vcenter_hostname: '10.60.20.40'
+vcenter_username: 'administrator@vsphere.local'
+vcenter_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66393336323439633734636366646163643833376439376430366638643735326364363137353862
+          3033363363663336356464336666663365653537613632320a633662383665333630383037656331
+          34313136303466623765666362363032363936353963653535373838633263343931393161316231
+          3230383664313963650a393035393031363536646661393936353564393933613461303637383836
+          3933
+vcenter_validate_certs: false
