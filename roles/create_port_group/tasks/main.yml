@@ -10,53 +10,19 @@
       verifycert: "{{ verifycert }}"
       serial_no: "{{ serial_no }}"
 
-#### Create Port Group Operation ####
-- name: Create Port Group
-  when: state == 'present'
-  block:
-    - name: Create a new port group and add existing ports to it
-      collections:
-        - dellemc.powermax
-      dellemc.powermax.portgroup:
-        <<: *uni_connection_vars
-        portgroup_name: "{{ portgroup_name }}"
-        state: 'present'
-        port_group_protocol: "SCSI_FC"
-        ports: "{{ ports }}"
-        port_state: 'present-in-group'
-      register: create_pg
+- name: Create a new port group and add existing ports to it
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.portgroup:
+    <<: *uni_connection_vars
+    portgroup_name: "{{ portgroup_name }}"
+    state: 'present'
+    port_group_protocol: "SCSI_FC"
+    ports: "{{ ports }}"
+    port_state: 'present-in-group'
+  register: create_pg
 
-    - name: Print out port group
-      ansible.builtin.debug:
-        msg: "{{ create_pg }}"
-      when: debug_mode | default(false)
-
-#### Remove Port Group Operation ####
-- name: Remove Port Group - remove existing ports from the port group and then delete the port group
-  when: state == 'absent'
-  block:
-    - name: Remove Ports in Port Group
-      collections:
-        - dellemc.powermax
-      dellemc.powermax.portgroup:
-        <<: *uni_connection_vars
-        portgroup_name: "{{ portgroup_name }}"
-        state: 'present'
-        port_group_protocol: "SCSI_FC"
-        ports: "{{ ports }}"
-        port_state: "absent-in-group"
-
-    - name: Delete Empty Port Group
-      collections:
-        - dellemc.powermax
-      dellemc.powermax.portgroup:
-        <<: *uni_connection_vars
-        portgroup_name: "{{ portgroup_name }}"
-        state: 'absent'
-        port_group_protocol: "SCSI_FC"
-      register: remove_pg
-
-    - name: Print out port group after removed
-      ansible.builtin.debug:
-        msg: "{{ remove_pg }}"
-      when: debug_mode | default(false)
+- name: Print out port group
+  ansible.builtin.debug:
+    msg: "{{ create_pg }}"
+  when: debug_mode | default(false)

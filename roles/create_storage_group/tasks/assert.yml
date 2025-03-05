@@ -9,7 +9,7 @@
     password: "{{ password }}"
     verifycert: "{{ verifycert }}"
     serial_no: "{{ serial_no }}"
-    sg_name: "{{ sg_name }}"
+    sg_name: "{{ cluster_name }}_SG"
     state: 'present'
   register: assert_sg
 
@@ -24,7 +24,7 @@
 
 - name: Append volume id to a list based on the inventory and naming convention
   ansible.builtin.set_fact:
-    composed_volume_ids: "{{ composed_volume_ids + [(sg_name | split('_'))[0] + '_DATA.' + item | string] }}"
+    composed_volume_ids: "{{ composed_volume_ids + [cluster_name + '_DATA.' + item | string] }}"
   loop: "{{ range(0, volume_count, 1) | list }}"
 
 - name: Print out composed volume id list
@@ -38,7 +38,7 @@
     fail_msg: "{{ item.msg }}"
     success_msg: "This assertion passed!"
   loop:
-    - { condition: "sg_name == assert_sg.storage_group_details.storageGroupId", msg: "storage group name does not match expected value" }
+    - { condition: "(cluster_name + '_SG') == assert_sg.storage_group_details.storageGroupId", msg: "storage group name does not match expected value" }
     - { condition: "volume_count == assert_sg.storage_group_details.num_of_vols", msg: "volume count does not match expected value" }
     - { condition: "((assert_sg.storage_group_volumes_details | map(attribute = 'volume_identifier') | list) | sort) == (composed_volume_ids | sort)",
         msg: "volume ids do not match expected values" }

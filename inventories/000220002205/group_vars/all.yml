@@ -1,7 +1,7 @@
 ---
 
 ansible_python_interpreter: '/usr/bin/python3.11'
-# ansible_user: 'jzhang01'
+# ansible_user: ''
 
 unispherehost: '10.60.8.152'
 universion: '101'
@@ -17,3 +17,6 @@ password: !vault |
 
 # serial number
 serial_no: '000220002205'
+
+# cluster name
+cluster_name: 'RI_Cluster2'

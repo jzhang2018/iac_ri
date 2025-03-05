@@ -1,7 +1,7 @@
 ---
 
 # storage group name
-sg_name: 'POD5-DT8_SG'
+# sg_name: 'POD5-DT8_SG'
 
 # volume count
 volume_count: 5

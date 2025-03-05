@@ -19,7 +19,7 @@
     - dellemc.powermax
   dellemc.powermax.storagegroup:
     <<: *uni_connection_vars
-    sg_name: "{{ sg_name }}"
+    sg_name: "{{ cluster_name }}_SG"
     # service_level: "Diamond"
     # srp: "SRP_1"
     # compression: true
@@ -30,8 +30,8 @@
     - dellemc.powermax
   dellemc.powermax.volume:
     <<: *uni_connection_vars
-    vol_name: "{{ (sg_name | split('_'))[0] + '_DATA.' }}{{ item }}"
-    sg_name: "{{ sg_name }}"  # Storage group name should be along with volume name
+    vol_name: "{{ cluster_name + '_DATA.' }}{{ item }}"
+    sg_name: "{{ cluster_name }}_SG"  # Storage group name should be along with volume name
     size: "{{ size }}"
     cap_unit: 'TB'
     state: 'present'
