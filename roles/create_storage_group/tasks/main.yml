@@ -1,5 +1,5 @@
 ---
-- name: Create storage Group
+- name: Create storage group
   ansible.builtin.include_tasks: create_storage_group.yml
 
 - name: Assertion test

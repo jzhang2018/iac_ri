@@ -1,0 +1,28 @@
+---
+# tasks file for create_port_group
+- name: Set unisphere common connection
+  ansible.builtin.set_fact:
+    uni_connection_vars: &uni_connection_vars
+      unispherehost: "{{ unispherehost }}"
+      universion: "{{ universion }}"
+      user: "{{ user }}"
+      password: "{{ password }}"
+      verifycert: "{{ verifycert }}"
+      serial_no: "{{ serial_no }}"
+
+- name: Create a new port group and add existing ports to it
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.portgroup:
+    <<: *uni_connection_vars
+    portgroup_name: "{{ cluster_name }}_PG"
+    state: 'present'
+    port_group_protocol: "SCSI_FC"
+    ports: "{{ ports }}"
+    port_state: 'present-in-group'
+  register: create_pg
+
+- name: Print out port group
+  ansible.builtin.debug:
+    msg: "{{ create_pg }}"
+  when: debug_mode | default(false)
