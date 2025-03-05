@@ -19,4 +19,4 @@ password: !vault |
 serial_no: '000220002205'
 
 # cluster name
-cluster_name: 'RI_Cluster2'
+cluster_name: 'RI_Cluster3'

@@ -24,7 +24,7 @@
 
 - name: Append volume id to a list based on the inventory and naming convention
   ansible.builtin.set_fact:
-    composed_volume_ids: "{{ composed_volume_ids + [cluster_name + '_DATA.' + item | string] }}"
+    composed_volume_ids: "{{ composed_volume_ids + [cluster_name + '_Data.' + item | string] }}"
   loop: "{{ range(0, volume_count, 1) | list }}"
 
 - name: Print out composed volume id list
