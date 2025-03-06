@@ -2,11 +2,11 @@
 # tasks file for gather_cluster_info
 - name: Gather Cluster Information
   vmware.vmware.cluster_info:
-    hostname: '10.60.20.40'
-    username: 'administrator@vsphere.local'
-    password: 'Ctcvmware1!'
-    validate_certs: false
-    cluster_name: 'Cluster1'
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    cluster_name: "{{ vcenter_cluster_name }}"
   register: cluster_info
 
 - name: Print out cluster info

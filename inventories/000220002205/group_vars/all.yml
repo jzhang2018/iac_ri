@@ -33,3 +33,6 @@ vcenter_password: !vault |
           3230383664313963650a393035393031363536646661393936353564393933613461303637383836
           3933
 vcenter_validate_certs: false
+
+# vcenter cluster name
+vcenter_cluster_name: 'Cluster1'
