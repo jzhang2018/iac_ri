@@ -14,17 +14,12 @@
     msg: "{{ cluster_hosts_vmhbas.hosts_vmhbas_info }}"  # type_debug: dict
   when: debug_mode | default(false)
 
-# Extract hosts' port_wwn for those type of Fibre Channel and construct a list of dict, in which the key
+# Extract hosts' port_wwn for those type of Fibre Channel with online status and construct a list of dict, in which the key
 # is the host name and the value is a list of port_wwn
 - name: Extract fibre channel type host and port_wwn into a list
   ansible.builtin.set_fact:
-    fibre_channel_host_list: >-
+    online_fibre_channel_host_list: >-
       {{
         cluster_hosts_vmhbas.hosts_vmhbas_info | dict2items |
-        json_query('[*].{host: key, port_wwn: value.vmhba_details[?type==`Fibre Channel`].port_wwn}')
+        json_query('[*].{host: key, port_wwn: value.vmhba_details[?type==`Fibre Channel`&&status==`online`].port_wwn}')
       }}
-
-- name: Display extracted Fibre Channel information
-  ansible.builtin.debug:
-    msg: "{{ fibre_channel_host_list }}"
-  when: debug_mode | default(false)

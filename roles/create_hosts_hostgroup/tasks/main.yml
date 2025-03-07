@@ -1,5 +1,53 @@
 ---
 # tasks file for create_hosts_hostgroup
-# - name: Print out vcenter cluster details
-#   ansible.builtin.debug:
-#     msg: "++++ cluster details: {{ cluster_details }}"
+
+# This list is extracted from vcenter. It is a list of dict where the key is the host name and the value is a list of its
+# port_wwn for those type of Fibre Channel and online status. It depends on role gather_vcenter_cluster_info or you will have to construct It
+# as a variable
+- name: Set unisphere common connection
+  ansible.builtin.set_fact:
+    uni_connection_vars: &uni_connection_vars
+      unispherehost: "{{ unispherehost }}"
+      universion: "{{ universion }}"
+      user: "{{ user }}"
+      password: "{{ password }}"
+      verifycert: "{{ verifycert }}"
+      serial_no: "{{ serial_no }}"
+
+- name: Display extracted Online Fibre Channel host and port_wwn information
+  ansible.builtin.debug:
+    msg: "{{ online_fibre_channel_host_list }}"
+  when: debug_mode | default(false)
+
+- name: Create pmax hosts based on vcenter hosts
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.host:
+    <<: *uni_connection_vars
+    host_name: "{{ item.host | split('.') | first | upper }}"
+    initiators: "{{ item.port_wwn | map('regex_replace', ':', '') | list }}"
+    host_flags:
+      consistent_lun: true
+    state: 'present'
+    initiator_state: 'present-in-host'
+  loop: "{{ online_fibre_channel_host_list }}"
+  register: pmax_hosts
+
+- name: Print out new created pmax_hosts
+  ansible.builtin.debug:
+    msg: "{{ pmax_hosts.results }}"
+  when: debug_mode | default(false)
+
+- name: Create a host group and add hosts to it
+  dellemc.powermax.hostgroup:
+    <<: *uni_connection_vars
+    hostgroup_name: "{{ cluster_name }}_HG"
+    hosts: "{{ pmax_hosts.results | json_query('[].host_details.hostId') }}"
+    state: 'present'
+    host_state: 'present-in-group'
+  register: hg
+
+- name: Print out new created host group
+  ansible.builtin.debug:
+    msg: "{{ hg }}"
+  when: debug_mode | default(false)
