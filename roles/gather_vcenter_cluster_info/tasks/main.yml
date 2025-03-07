@@ -1,29 +1,5 @@
 ---
 # tasks file for gather_vcenter_cluster_info
-# - name: Gather vcenter cluster info
-#   vmware.vmware.cluster_info:
-#     hostname: "{{ vcenter_hostname }}"
-#     username: "{{ vcenter_username }}"
-#     password: "{{ vcenter_password }}"
-#     validate_certs: "{{ vcenter_validate_certs }}"
-#     datacenter_name: "{{ vcenter_datacenter_name }}"
-#     cluster_name: "{{ vcenter_cluster_name }}"
-#   register: cluster_info
-
-# - name: Print out cluster info
-#   ansible.builtin.debug:
-#     msg: "{{ cluster_info }}"
-#   when: debug_mode | default(false)
-
-# - name: Set variable vcenter_hosts list
-#   ansible.builtin.set_fact:
-#     vcenter_hosts: "{{ (cluster_info.clusters[vcenter_cluster_name].hosts) | map(attribute='name') | list }}"
-
-# - name: Print out vcenter hosts
-#   ansible.builtin.debug:
-#     msg: "{{ vcenter_hosts }}"
-#   when: debug_mode | default(false)
-
 - name: Gather info about vmhbas of all ESXi Host in the given Cluster
   community.vmware.vmware_host_vmhba_info:
     hostname: '{{ vcenter_hostname }}'
