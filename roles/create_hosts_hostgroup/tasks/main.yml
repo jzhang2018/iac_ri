@@ -1,5 +1,5 @@
 ---
 # tasks file for create_hosts_hostgroup
-- name: Print out vcenter cluster details
-  ansible.builtin.debug:
-    msg: "++++ cluster details: {{ cluster_details }}"
+# - name: Print out vcenter cluster details
+#   ansible.builtin.debug:
+#     msg: "++++ cluster details: {{ cluster_details }}"
