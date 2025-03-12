@@ -8,3 +8,6 @@ exclude_paths:
   - .github/  # github workflow files
   - .ansible-lint
   - /roles/*/tests/test.yml
+
+skip_list:
+  - unknown-module
