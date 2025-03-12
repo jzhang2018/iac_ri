@@ -1,2 +1,41 @@
 ---
-# TODO: assertion for create_port_group
+
+# Assertion gets called when a new host group is created with ports defined in inventory
+- name: Get newly created port group details including ports
+  dellemc.powermax.portgroup:
+    unispherehost: "{{ unispherehost }}"
+    universion: "{{ universion }}"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    verifycert: "{{ verifycert }}"
+    serial_no: "{{ serial_no }}"
+    portgroup_name: "{{ cluster_name }}_PG"
+    state: 'present'
+  register: assert_pg
+
+- name: Print out newly created port group details including ports
+  ansible.builtin.debug:
+    msg: "{{ assert_pg.portgroup_details['symmetrixPortKey'] }}" # type_debug: list
+  when: debug_mode | default(false)
+
+# the names of keys are different between module parameters and return values for ports
+# in module parameter: director_id, port_id and in return value: directorId, portId
+# we need to rename them from module names to return value ones
+- name: Rename keys director_id, port_id to directorId, portId
+  ansible.builtin.set_fact:
+    renamed_pg_ports: "{{ renamed_pg_ports | default([]) + [{'directorId': item.director_id, 'portId': item.port_id}] }}"
+  with_items: "{{ ports }}"
+    
+- name: Print out renamed_pg_ports list
+  ansible.builtin.debug:
+    msg: "{{ renamed_pg_ports }}"
+  when: debug_mode | default(false)
+
+- name: Assert multiple conditions separately - port group with ports
+  ansible.builtin.assert:
+    that: "{{ item.condition }}"
+    fail_msg: "{{ item.msg }}"
+    success_msg: "This assertion passed!"
+  loop:
+    - { condition: "(cluster_name + '_PG') == assert_pg.portgroup_details.portGroupId", msg: "port group name does not match expected value" }
+    - { condition: "(renamed_pg_ports | sort(attribute='directorId')) == ( assert_pg.portgroup_details['symmetrixPortKey'] | sort(attribute='directorId'))", msg: "ports do not match expected values" }

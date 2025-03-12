@@ -43,6 +43,8 @@
     <<: *uni_connection_vars
     hostgroup_name: "{{ cluster_name }}_HG"
     hosts: "{{ pmax_hosts.results | json_query('[].host_details.hostId') }}"
+    host_flags:
+      consistent_lun: true
     state: 'present'
     host_state: 'present-in-group'
   register: hg
