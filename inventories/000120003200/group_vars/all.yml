@@ -36,4 +36,3 @@ vcenter_validate_certs: false
 
 # vcenter cluster name
 vcenter_cluster_name: 'b290630'
-# vcenter_datacenter_name: "OpenShift"
