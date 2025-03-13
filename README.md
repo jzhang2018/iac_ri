@@ -27,3 +27,8 @@ The usecases are:<br/>
   -- It creates a new port group and adds existing ports to it (configureed in inventory file group_vars/port_group/vars.yml)<br/>
   -- Run play book:<br/> 
         ansible-playbook -i inventories/000120003200 create_port_group.yml --vault-password-file ~/.vp -e "debug_mode=true"<br/>
+
+5. Create Masking View<br/>
+  -- It creates a new masking view with storage group, host group and port group (configureed in inventory file group_vars/create_maskingview/vars.yml)<br/>
+  -- Run play book:<br/> 
+        ansible-playbook -i inventories/000120003200 create_maskingview.yml --vault-password-file ~/.vp -e "debug_mode=true"<br/>

@@ -1,0 +1,8 @@
+---
+- name: Create maskingview play
+  hosts: create_maskingview
+  connection: local
+  gather_facts: false
+
+  roles:
+    - create_maskingview

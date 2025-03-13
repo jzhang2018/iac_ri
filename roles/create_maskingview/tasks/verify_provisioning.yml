@@ -1,0 +1,37 @@
+---
+
+- name: Set unisphere common connection
+  ansible.builtin.set_fact:
+    uni_connection_vars: &uni_connection_vars
+      unispherehost: "{{ unispherehost }}"
+      universion: "{{ universion }}"
+      user: "{{ user }}"
+      password: "{{ password }}"
+      verifycert: "{{ verifycert }}"
+      serial_no: "{{ serial_no }}"
+
+- name: Verify storage group provisioning
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.storagegroup:
+    <<: *uni_connection_vars
+    sg_name: "{{ cluster_name }}_SG"
+    state: 'present'
+  register: verify_sg
+
+- name: Debug - print out storage group provisionin
+  ansible.builtin.debug:
+    msg: "{{ verify_sg.storage_group_details }}"
+  when: debug_mode | default(false)
+
+- name: Set storage group verifucation flag
+  ansible.builtin.set_fact:
+    sg_flag: "{{ true if verify_sg.storage_group_details.num_of_vols > 0 else false }}"
+
+- name: Debug - sg_flag
+  ansible.builtin.debug:
+    msg: "{{ sg_flag }}"
+  when: debug_mode | default(false)
+
+# TODO - Verify host group provisioning
+# TODO - Verify port group provisioning
