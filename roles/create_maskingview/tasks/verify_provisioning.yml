@@ -24,7 +24,7 @@
     msg: "{{ verify_sg.storage_group_details }}"
   when: debug_mode | default(false)
 
-- name: Set storage group verifucation flag
+- name: Set storage group verification flag
   ansible.builtin.set_fact:
     sg_flag: "{{ true if verify_sg.storage_group_details.num_of_vols > 0 else false }}"
 
