@@ -3,19 +3,19 @@
 - name: Set unisphere common connection
   ansible.builtin.set_fact:
     uni_connection_vars: &uni_connection_vars
-      unispherehost: "{{ unispherehost }}"
-      universion: "{{ universion }}"
-      user: "{{ user }}"
-      password: "{{ password }}"
-      verifycert: "{{ verifycert }}"
-      serial_no: "{{ serial_no }}"
+      unispherehost: "{{ unisphere_host }}"
+      universion: "{{ unisphere_version }}"
+      user: "{{ unisphere_user }}"
+      password: "{{ unisphere_password }}"
+      verifycert: "{{ unisphere_verifycert }}"
+      serial_no: "{{ unisphere_serial_no }}"
 
 - name: Create a new port group and add existing ports to it
   collections:
     - dellemc.powermax
   dellemc.powermax.portgroup:
     <<: *uni_connection_vars
-    portgroup_name: "{{ cluster_name }}_PG"
+    portgroup_name: "{{ vcenter_cluster_name }}_PG"
     state: 'present'
     port_group_protocol: "SCSI_FC"
     ports: "{{ ports }}"

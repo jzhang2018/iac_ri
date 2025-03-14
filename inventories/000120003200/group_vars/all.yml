@@ -1,14 +1,14 @@
 ---
 
-ansible_python_interpreter: '/usr/bin/python3.11'
-# ansible_user: ''
-
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# unisphere variables
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # unisphere connection
-unispherehost: '10.60.8.152'
-universion: '101'
-verifycert: false
-user: 'smc'
-password: !vault |
+unisphere_host: '10.60.8.152'
+unisphere_version: '101'
+unisphere_verifycert: false
+unisphere_user: 'smc'
+unisphere_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   66336333323238323864623034613363326434303562636231366139376661633635316161643066
   6263663562613538326463303235306562613464343736350a346634343033646630333434613766
@@ -17,11 +17,12 @@ password: !vault |
   3837
 
 # serial number
-serial_no: '000220002205'
+unisphere_serial_no: '000220002205'
+unisphere_serial_no2: '000120003200'
 
-# cluster name
-cluster_name: 'RI_Cluster4'
-
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# vcenter variables
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # vcenter connection
 vcenter_hostname: '10.60.20.40'
 vcenter_username: 'administrator@vsphere.local'
@@ -36,3 +37,11 @@ vcenter_validate_certs: false
 
 # vcenter cluster name
 vcenter_cluster_name: 'b290630'
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# other variables
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ansible_python_interpreter: '/usr/bin/python3.11'
+# ansible_user:
+inventory_groupvars_dir: "inventories/{{ unisphere_serial_no2 }}/group_vars"
+# inventory_groupvars_dir: "inventories/000120003200/group_vars"

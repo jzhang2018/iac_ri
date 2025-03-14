@@ -3,13 +3,13 @@
 # Assertion gets called when a new host group is created with ports defined in inventory
 - name: Get newly created port group details including ports
   dellemc.powermax.portgroup:
-    unispherehost: "{{ unispherehost }}"
-    universion: "{{ universion }}"
-    user: "{{ user }}"
-    password: "{{ password }}"
-    verifycert: "{{ verifycert }}"
-    serial_no: "{{ serial_no }}"
-    portgroup_name: "{{ cluster_name }}_PG"
+    unispherehost: "{{ unisphere_host }}"
+    universion: "{{ unisphere_version }}"
+    user: "{{ unisphere_user }}"
+    password: "{{ unisphere_password }}"
+    verifycert: "{{ unisphere_verifycert }}"
+    serial_no: "{{ unisphere_serial_no }}"
+    portgroup_name: "{{ vcenter_cluster_name }}_PG"
     state: 'present'
   register: assert_pg
 
@@ -25,7 +25,7 @@
   ansible.builtin.set_fact:
     renamed_pg_ports: "{{ renamed_pg_ports | default([]) + [{'directorId': item.director_id, 'portId': item.port_id}] }}"
   with_items: "{{ ports }}"
-    
+
 - name: Print out renamed_pg_ports list
   ansible.builtin.debug:
     msg: "{{ renamed_pg_ports }}"
@@ -37,5 +37,5 @@
     fail_msg: "{{ item.msg }}"
     success_msg: "This assertion passed!"
   loop:
-    - { condition: "(cluster_name + '_PG') == assert_pg.portgroup_details.portGroupId", msg: "port group name does not match expected value" }
+    - { condition: "(vcenter_cluster_name + '_PG') == assert_pg.portgroup_details.portGroupId", msg: "port group name does not match expected value" }
     - { condition: "(renamed_pg_ports | sort(attribute='directorId')) == ( assert_pg.portgroup_details['symmetrixPortKey'] | sort(attribute='directorId'))", msg: "ports do not match expected values" }

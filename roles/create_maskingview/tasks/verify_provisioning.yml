@@ -3,12 +3,12 @@
 # - name: Set unisphere common connection
 #   ansible.builtin.set_fact:
 #     uni_connection_vars: &uni_connection_vars
-#       unispherehost: "{{ unispherehost }}"
-#       universion: "{{ universion }}"
-#       user: "{{ user }}"
-#       password: "{{ password }}"
-#       verifycert: "{{ verifycert }}"
-#       serial_no: "{{ serial_no }}"
+#       unispherehost: "{{ unisphere_host }}"
+#       universion: "{{ unisphere_version }}"
+#       user: "{{ unisphere_user }}"
+#       password: "{{ unisphere_password }}"
+#       verifycert: "{{ unisphere_verifycert }}"
+#       serial_no: "{{ unisphere_serial_no }}"
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Verify storage group provisioning
@@ -17,7 +17,7 @@
 #     - dellemc.powermax
 #   dellemc.powermax.storagegroup:
 #     <<: *uni_connection_vars
-#     sg_name: "{{ cluster_name }}_SG"
+#     sg_name: "{{ vcenter_cluster_name }}_SG"
 #     state: 'present'
 #   register: verify_sg
 
@@ -44,7 +44,7 @@
 
 - name: Set port group verification flag
   ansible.builtin.set_fact:
-    pg_flag: "{{ true if (portgroup_details.portGroupId == cluster_name + '_PG' and portgroup_details.num_of_ports > 0) else false }}"
+    pg_flag: "{{ true if (portgroup_details.portGroupId == vcenter_cluster_name + '_PG' and portgroup_details.num_of_ports > 0) else false }}"
 
 - name: Debug - pg_flag
   ansible.builtin.debug:

@@ -6,22 +6,22 @@
   gather_facts: false
 
   pre_tasks:
-    # - name: Load create_host_hostgroup variables
-    #   ansible.builtin.include_vars: inventories/000120003200/group_vars/create_hosts_hostgroup/vars.yml
+    - name: Load create_host_hostgroup variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_hosts_hostgroup/vars.yml"
 
     # - name: Run pre-task role create_hosts_hostgroup
     #   ansible.builtin.include_role:
     #     name: create_hosts_hostgroup
 
-    # - name: Load create_storage_group variables
-    #   ansible.builtin.include_vars: inventories/000120003200/group_vars/create_storage_group/vars.yml
+    - name: Load create_storage_group variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_storage_group/vars.yml"
 
-    # - name: Run pre-task role create_hosts_hostgroup
-    #   ansible.builtin.include_role:
-    #     name: create_hosts_hostgroup
+    - name: Run pre-task role create_storage_group
+      ansible.builtin.include_role:
+        name: create_storage_group
 
     - name: Load create_port_group variables
-      ansible.builtin.include_vars: inventories/000120003200/group_vars/create_port_group/vars.yml
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_port_group/vars.yml"
 
     - name: Run pre-task role create_port_group
       ansible.builtin.include_role:

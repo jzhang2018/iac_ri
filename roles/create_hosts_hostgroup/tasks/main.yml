@@ -7,12 +7,12 @@
 - name: Set unisphere common connection
   ansible.builtin.set_fact:
     uni_connection_vars: &uni_connection_vars
-      unispherehost: "{{ unispherehost }}"
-      universion: "{{ universion }}"
-      user: "{{ user }}"
-      password: "{{ password }}"
-      verifycert: "{{ verifycert }}"
-      serial_no: "{{ serial_no }}"
+      unispherehost: "{{ unisphere_host }}"
+      universion: "{{ unisphere_version }}"
+      user: "{{ unisphere_user }}"
+      password: "{{ unisphere_password }}"
+      verifycert: "{{ unisphere_verifycert }}"
+      serial_no: "{{ unisphere_serial_no }}"
 
 - name: Display extracted Online Fibre Channel host and port_wwn information
   ansible.builtin.debug:
@@ -41,7 +41,7 @@
 - name: Create a host group and add hosts to it
   dellemc.powermax.hostgroup:
     <<: *uni_connection_vars
-    hostgroup_name: "{{ cluster_name }}_HG"
+    hostgroup_name: "{{ vcenter_cluster_name }}_HG"
     hosts: "{{ pmax_hosts.results | json_query('[].host_details.hostId') }}"
     host_flags:
       consistent_lun: true
