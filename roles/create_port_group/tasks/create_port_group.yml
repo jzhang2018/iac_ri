@@ -22,11 +22,6 @@
     port_state: 'present-in-group'
   register: create_pg
 
-- name: Set variable portgroup_details for later user
+- name: Set variable portgroup_name for future reference
   ansible.builtin.set_fact:
-    portgroup_details: "{{ create_pg.portgroup_details }}"
-
-- name: Print out portgroup_details
-  ansible.builtin.debug:
-    msg: "{{ portgroup_details }}"
-  when: debug_mode | default(false)
+    portgroup_name: "{{ create_pg.portgroup_details.portGroupId }}"

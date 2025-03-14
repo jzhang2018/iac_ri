@@ -6,26 +6,47 @@
   gather_facts: false
 
   pre_tasks:
-    - name: Load create_host_hostgroup variables
-      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_hosts_hostgroup/vars.yml"
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_hosts_hostgroup
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # - name: Load create_host_hostgroup variables
+    #   ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_hosts_hostgroup/vars.yml"
 
-    # - name: Run pre-task role create_hosts_hostgroup
+    # - name: Run role create_hosts_hostgroup
     #   ansible.builtin.include_role:
     #     name: create_hosts_hostgroup
 
+    # TODO: get hostgroup_name for Masking View
+    
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_storage_group
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     - name: Load create_storage_group variables
       ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_storage_group/vars.yml"
 
-    - name: Run pre-task role create_storage_group
+    - name: Run role create_storage_group
       ansible.builtin.include_role:
         name: create_storage_group
 
+    - name: Get storagegroup_name for Masking View
+      ansible.builtin.debug:
+        msg: "{{ storagegroup_name }}"
+      when: debug_mode | default(false)
+
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_port_group
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     - name: Load create_port_group variables
       ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_port_group/vars.yml"
 
-    - name: Run pre-task role create_port_group
+    - name: Run role create_port_group
       ansible.builtin.include_role:
         name: create_port_group
+
+    - name: Get portgroup_name for Masking View
+      ansible.builtin.debug:
+        msg: "{{ portgroup_name }}"
+      when: debug_mode | default(false)
 
   roles:
     - create_maskingview

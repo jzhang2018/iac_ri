@@ -1,7 +1,9 @@
 ---
 # tasks file for create_maskingview
 
-- name: Verify if storage group, host group and port group are provisioned
-  ansible.builtin.include_tasks: verify_provisioning.yml
+- name: Debug from role create_maskingview
+  ansible.builtin.debug:
+    msg: "Hi, I am creating maskingview!"
+  when: debug_mode | default(false)
 
 # - name: Create maskingview when verifications are all true

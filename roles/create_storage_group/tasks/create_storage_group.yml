@@ -24,6 +24,11 @@
     # srp: "SRP_1"
     # compression: true
     state: 'present'
+  register: create_sg
+
+- name: Set variable storgegroup_name for future reference
+  ansible.builtin.set_fact:
+    storagegroup_name: "{{ create_sg.storage_group_details.storageGroupId }}"
 
 - name: Create volumes for newly created storage group
   collections:
