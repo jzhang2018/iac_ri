@@ -1,9 +1,7 @@
 ---
 # tasks file for create_hosts_hostgroup
 
-# This list is extracted from vcenter. It is a list of dict where the key is the host name and the value is a list of its
-# port_wwn for those type of Fibre Channel and online status. It depends on role gather_vcenter_cluster_info or you will have to construct It
-# as a variable
+# Unnisphere host connection
 - name: Set unisphere common connection
   ansible.builtin.set_fact:
     uni_connection_vars: &uni_connection_vars
@@ -14,6 +12,12 @@
       verifycert: "{{ unisphere_verifycert }}"
       serial_no: "{{ unisphere_serial_no }}"
 
+# Gather vcenter cluster info
+- name: Include a task that gathers vcenter cluster info
+  ansible.builtin.include_tasks: gather_vcenter_cluster_info.yml
+
+# This list is extracted from vcenter. It is a list of dict where the key is the host name and the value is a list of its
+# port_wwn for those type of Fibre Channel and online status
 - name: Display extracted Online Fibre Channel host and port_wwn information
   ansible.builtin.debug:
     msg: "{{ online_fibre_channel_host_list }}"
@@ -49,7 +53,11 @@
     host_state: 'present-in-group'
   register: hg
 
-- name: Print out new created host group
+- name: Set variable hostgroup_name for future reference
+  ansible.builtin.set_fact:
+    hostgroup_name: "{{ hg.hostgroup_details.hostGroupId }}"
+
+- name: Print out new created hostgroup_name
   ansible.builtin.debug:
-    msg: "{{ hg }}"
+    msg: "{{ hostgroup_name }}"
   when: debug_mode | default(false)
