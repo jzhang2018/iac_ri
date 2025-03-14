@@ -9,15 +9,18 @@
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # pre-task: create_hosts_hostgroup
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # - name: Load create_host_hostgroup variables
-    #   ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_hosts_hostgroup/vars.yml"
+    - name: Load create_host_hostgroup variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_hosts_hostgroup/vars.yml"
 
-    # - name: Run role create_hosts_hostgroup
-    #   ansible.builtin.include_role:
-    #     name: create_hosts_hostgroup
+    - name: Run role create_hosts_hostgroup
+      ansible.builtin.include_role:
+        name: create_hosts_hostgroup
 
-    # TODO: get hostgroup_name for Masking View
-    
+    - name: Get hostgroup_name for Masking View
+      ansible.builtin.debug:
+        msg: "{{ hostgroup_name }}"
+      when: debug_mode | default(false)
+
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # pre-task: create_storage_group
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
