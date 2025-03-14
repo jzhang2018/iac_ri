@@ -9,7 +9,7 @@
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # pre-task: create_hosts_hostgroup
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    - name: Load create_host_hostgroup variables
+    - name: Load create_hosts_hostgroup variables
       ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_hosts_hostgroup/vars.yml"
 
     - name: Run role create_hosts_hostgroup
