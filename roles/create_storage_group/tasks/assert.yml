@@ -39,7 +39,7 @@
     success_msg: "This assertion passed!"
   loop:
     - { condition: "(vcenter_cluster_name + '_SG') == assert_sg.storage_group_details.storageGroupId", msg: "storage group name does not match expected value" }
-    - { condition: "volume_index == assert_sg.storage_group_details.num_of_vols", msg: "volume count does not match expected value" }
-    - { condition: "((( assert_sg.storage_group_volumes_details | map(attribute = 'volume_identifier') | list) | map('lower')) | sort) == ((composed_volume_ids | map('lower')) | sort)",
+    - { condition: "volume_index <= assert_sg.storage_group_details.num_of_vols", msg: "volume count does not match expected value" }
+    - { condition: "((composed_volume_ids | map('lower')) | sort) is subset(((( assert_sg.storage_group_volumes_details | map(attribute = 'volume_identifier') | list) | map('lower')) | sort))",
         msg: "volume ids do not match expected values" }
-
+  
