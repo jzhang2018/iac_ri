@@ -8,4 +8,4 @@ jobs:
       - name: check code out from github into "ubuntu-latest"
         uses: actions/checkout@v4
       - name: run ansible lint
-        uses: ansible/ansible-lint@main
+        uses: ansible/ansible-lint@v6.17.0
