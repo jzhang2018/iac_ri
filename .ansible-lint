@@ -7,11 +7,11 @@
 exclude_paths:
   - .github/  # github workflow files
   - .ansible-lint
-  - /roles/*/tests/test.yml
-  - /roles/*/meta/main.yml
-  - /roles/*/defaults/main.yml
-  - /roles/*/handlers/main.yml
-  - /roles/*/vars/main.yml
+  - roles/*/tests/test.yml
+  - roles/*/meta/main.yml
+  - roles/*/defaults/main.yml
+  - roles/*/handlers/main.yml
+  - roles/*/vars/main.yml
 
 skip_list:
   - unknown-module
