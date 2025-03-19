@@ -17,7 +17,7 @@ jobs:
           pip install ansible ansible-lint
       
       - name: check code out from github into "ubuntu-latest"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.1
 
       - name: Set up Python
         uses: actions/setup-python@v5
