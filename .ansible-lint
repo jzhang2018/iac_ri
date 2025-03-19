@@ -12,6 +12,7 @@ exclude_paths:
   - roles/*/defaults/main.yml
   - roles/*/handlers/main.yml
   - roles/*/vars/main.yml
+  - requirements.txt
 
 # skip_list:
 #   - unknown-module
