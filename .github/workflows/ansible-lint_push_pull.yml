@@ -26,3 +26,5 @@ jobs:
 
       - name: run ansible lint
         uses: ansible/ansible-lint@v6.17.0
+        with:
+          args: "--exclude=requirements.txt"
