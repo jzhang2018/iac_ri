@@ -10,6 +10,12 @@ jobs:
   AnsibleLint:
     runs-on: ubuntu-latest     # name of a container (environment) to run your automations in
     steps:
+      - name: Install Ansible and Ansible Lint
+        run: |
+          pip install --upgrade setuptools setuptools_scm
+          python -m pip install --upgrade pip
+          pip install ansible ansible-lint
+      
       - name: check code out from github into "ubuntu-latest"
         uses: actions/checkout@v4
 
@@ -17,12 +23,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-
-      - name: Install Ansible and Ansible Lint
-        run: |
-          pip install --upgrade setuptools setuptools_scm
-          python -m pip install --upgrade pip
-          pip install ansible ansible-lint
 
       - name: run ansible lint
         uses: ansible/ansible-lint@v6.17.0
