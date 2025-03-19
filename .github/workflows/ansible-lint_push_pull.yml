@@ -1,6 +1,11 @@
 
 name: GitHub automations ansible-lint for best practice
-on: [push, pull_request]   # the list of conditions on which our automation triggers
+on:
+  push:
+      branches:
+        - dev
+  pull_request:
+
 jobs:
   AnsibleLint:
     runs-on: ubuntu-latest     # name of a container (environment) to run your automations in
