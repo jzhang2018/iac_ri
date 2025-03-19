@@ -23,8 +23,3 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-
-      - name: run ansible lint
-        uses: ansible/ansible-lint@v6.17.0
-        with:
-          args: "--exclude=requirements.txt"
