@@ -1,2 +1,2 @@
-PyU4V
-pyvmomi
+urllib3>=1.26.7
+PyU4V>=9.1.2.0
