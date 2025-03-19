@@ -12,8 +12,8 @@ jobs:
     steps:
       - name: Install Ansible and Ansible Lint
         run: |
-          pip install --upgrade setuptools setuptools_scm
           python -m pip install --upgrade pip
+          pip install --upgrade setuptools setuptools_scm
           pip install ansible ansible-lint
       
       - name: check code out from github into "ubuntu-latest"
