@@ -24,7 +24,7 @@ unisphere_serial_no2: '000120003200'
 # vcenter variables
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # vcenter connection
-vcenter_hostname: '10.60.20.40'
+vcenter_hostname: '10.60.17.97'
 vcenter_username: 'administrator@vsphere.local'
 vcenter_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
@@ -36,7 +36,7 @@ vcenter_password: !vault |
 vcenter_validate_certs: false
 
 # vcenter cluster name
-vcenter_cluster_name: 'b290630'
+vcenter_cluster_name: 'Tesla-Cluster'
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # other variables
