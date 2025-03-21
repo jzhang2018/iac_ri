@@ -1,11 +1,6 @@
 ---
 # tasks file for create_maskingview
 
-- name: Debug from role create_maskingview
-  ansible.builtin.debug:
-    msg: "Hi, I am creating maskingview!"
-  when: debug_mode | default(false)
-
 - name: Create MV with hostgroup, storage group and port group
   collections:
     - dellemc.powermax
@@ -19,7 +14,7 @@
     mv_name: "{{ vcenter_cluster_name }}_MV"
     portgroup_name: "{{ portgroup_name }}"
     hostgroup_name: "{{ hostgroup_name }}"
-    sg_name: "{{ storagegroup_nam }}"
+    sg_name: "{{ storagegroup_name }}"
     state: "present"
   register: mv
 
