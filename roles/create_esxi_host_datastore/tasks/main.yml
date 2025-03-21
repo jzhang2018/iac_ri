@@ -1,0 +1,75 @@
+---
+# tasks file for create_esxi_host_datastore
+
+# Workflow: rescan vcenter ESXi hosts HBA subsystem -> get vcenter EXSi host disk info and match to those volumes' wwn 
+#   -> mount datastore on ESXi host
+
+# VCenter host connection
+- name: Set vcenter common connection
+  ansible.builtin.set_fact:
+    vcenter_connection_vars: &vcenter_connection_vars
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: "{{ vcenter_validate_certs }}"
+
+# rescan
+- name: Rescan a given cluster and refresh storage system objects
+  community.vmware.vmware_host_scanhba:
+    <<: *vcenter_connection_vars
+    cluster_name: "{{ vcenter_cluster_name }}"
+    refresh_storage: true
+    rescan_vmfs: true
+    rescan_hba: true
+  register: rescan_results
+
+- name: Print out rescan cluster results
+  ansible.builtin.debug:
+    msg: "{{ rescan_results }}"
+  when: debug_mode | default(false)  
+
+# get vmware_host_vmhba_info?
+- name: Gather info about vmhbas of all ESXi Host in the given Cluster
+  community.vmware.vmware_host_disk_info:
+    <<: *vcenter_connection_vars
+    cluster_name: '{{ vcenter_cluster_name }}'
+  register: cluster_host_vmhbas
+
+- name: Print out cluster_host_vmhbas
+  ansible.builtin.debug:
+    msg: "{{ cluster_host_vmhbas.hosts_disk_info }}"
+  when: debug_mode | default(false) 
+
+# data compare  
+- name: Flatten and extract display_name values
+  ansible.builtin.set_fact:
+    display_names: "{{ cluster_host_vmhbas.hosts_disk_info | dict2items | map(attribute='value') | list | flatten  | selectattr('display_name', 'search', '\\(naa\\.') }}"
+
+- name: Extract disks' naa into a list using regex
+  ansible.builtin.set_fact:
+    disk_naa_list: "{{ display_names | map(attribute='display_name') | map('regex_replace', '.*\\(naa\\.(.*?)\\)', '\\1') | list }}"
+
+- name: Print out disk_naa_list
+  ansible.builtin.debug:
+    msg: "{{ disk_naa_list }}"
+  when: debug_mode | default(false) 
+
+# Check if PowerMax volumes' wwn are in naa list or not
+- name: Include a task that check if wwn is in naa
+  ansible.builtin.include_tasks: wwn_in_naa_list.yml
+
+# create ds with volumes wwn list only volume_wwn_list is a subset of disk_naa_list
+- name: Mount VMFS datastores to ESXi
+  community.vmware.vmware_host_datastore:
+    <<: *vcenter_connection_vars
+    datastore_name: '{{ item.name }}' # TODO
+    datastore_type: 'vmfs'
+    vmfs_device_name: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # just wwn
+    vmfs_version: 6
+    esxi_hostname: '{{ inventory_hostname }}'
+    state: present
+
+
+
+
+

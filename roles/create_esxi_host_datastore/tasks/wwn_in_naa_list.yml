@@ -1,0 +1,22 @@
+---
+
+- name: Fail if volume wwn is not avalable or empty
+  ansible.builtin.fail:
+    msg: "PowerMax volume creation is not done correctly as the wwn list is not avaible or empty!"
+  when: volume_wwn_list is not defined or volume_wwn_list | length == 0
+
+- name: Check if volume_wwn_list is a subset of disk_naa_list
+  ansible.builtin.set_fact:
+    is_subset: "{{ volume_wwn_list | intersect(disk_naa_list) | length == volume_wwn_list | length }}"
+
+- name: Print if volume_wwn_list is a subset of disk_naa_list
+  debug:
+    msg: "if volume_wwn_list is a subset of disk_naa_list: {{ is_subset }}"
+
+- name: Find the difference between disk_naa_list and volume_wwn_list
+  set_fact:
+    difference: "{{ disk_naa_list | difference(volume_wwn_list) }}"
+
+- name: Print the difference between the two lists
+  debug:
+    msg: "The difference between disk_naa_list and volume_wwn_list is: {{ difference }}"

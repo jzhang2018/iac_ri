@@ -1,0 +1,8 @@
+---
+- name: Datastore Play
+  hosts: create_esxi_host_datastore
+  connection: local
+  gather_facts: false
+
+  roles:
+    - create_esxi_host_datastore
