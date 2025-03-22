@@ -59,15 +59,16 @@
   ansible.builtin.include_tasks: wwn_in_naa_list.yml
 
 # create ds with volumes wwn list only volume_wwn_list is a subset of disk_naa_list
-- name: Mount VMFS datastores to ESXi
-  community.vmware.vmware_host_datastore:
-    <<: *vcenter_connection_vars
-    datastore_name: '{{ item.name }}' # TODO
-    datastore_type: 'vmfs'
-    vmfs_device_name: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # just wwn
-    vmfs_version: 6
-    esxi_hostname: '{{ inventory_hostname }}'
-    state: present
+# - name: Mount VMFS datastores to ESXi
+#   community.vmware.vmware_host_datastore:
+#     <<: *vcenter_connection_vars
+#     datastore_name: '{{ item.name }}' # TODO
+#     datastore_type: 'vmfs'
+#     vmfs_device_name: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # just wwn
+#     vmfs_version: 6
+#     esxi_hostname: '{{ inventory_hostname }}'
+#     state: present
+  
 
 
 
