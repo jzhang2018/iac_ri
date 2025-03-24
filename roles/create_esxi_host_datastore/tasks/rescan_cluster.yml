@@ -1,0 +1,27 @@
+---
+
+- name: Set vcenter common connection
+  ansible.builtin.set_fact:
+    vcenter_connection_vars: &vcenter_connection_vars
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: "{{ vcenter_validate_certs }}"
+
+- name: Rescan a given cluster and refresh storage system objects
+  community.vmware.vmware_host_scanhba:
+    <<: *vcenter_connection_vars
+    cluster_name: "{{ vcenter_cluster_name }}"
+    refresh_storage: true
+    rescan_vmfs: true
+    rescan_hba: true
+  register: rescan_results
+
+- name: Get host list in the cluster
+  ansible.builtin.set_fact:
+    host_list: "{{ rescan_results.result | dict2items | map(attribute='key') | list }}" 
+
+- name: Print out rescan cluster host list
+  ansible.builtin.debug:
+    msg: "{{ host_list }}"
+  when: debug_mode | default(false)

@@ -1,7 +1,25 @@
 ---
 
-# Data manipulation 
-- name: Flatten and extract display_name values from  cluster_host_disk_info
+- name: Set vcenter common connection
+  ansible.builtin.set_fact:
+    vcenter_connection_vars: &vcenter_connection_vars
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: "{{ vcenter_validate_certs }}"
+
+- name: Gather all ESXi host disk info in the given cluster
+  community.vmware.vmware_host_disk_info:
+    <<: *vcenter_connection_vars
+    cluster_name: '{{ vcenter_cluster_name }}'
+  register: cluster_host_disk_info
+
+- name: Print out host disk info
+  ansible.builtin.debug:
+    msg: "{{ cluster_host_disk_info.hosts_disk_info }}"
+  when: debug_mode | default(false) 
+
+- name: Flatten and extract display_name values from cluster_host_disk_info
   ansible.builtin.set_fact:
     display_names: "{{ cluster_host_disk_info.hosts_disk_info | dict2items | map(attribute='value') | list | flatten  | selectattr('display_name', 'search', '\\(naa\\.') }}"
 
@@ -14,24 +32,20 @@
     msg: "{{ disk_naa_list }}"
   when: debug_mode | default(false) 
 
-- name: Fail if volume wwn is not avalable or empty
-  ansible.builtin.fail:
-    msg: "PowerMax volume creation is not done correctly as the wwn list is not avaible or empty!"
-  when: volume_wwn_list is not defined or volume_wwn_list | length == 0
-# TODO: graceful error handling
+- name: Convert volume_dict wwn (key) to list
+  ansible.builtin.set_fact:
+    volume_wwn_list: "{{ volume_dict | dict2items | map(attribute='key') | list }}"
+
+- name: Print out volume wwn list
+  ansible.builtin.debug:
+    msg: "{{ volume_wwn_list }}"
+  when: debug_mode | default(false)
 
 - name: Check if volume_wwn_list is a subset of disk_naa_list
   ansible.builtin.set_fact:
     is_subset: "{{ volume_wwn_list | intersect(disk_naa_list) | length == volume_wwn_list | length }}"
 
-- name: Print if volume_wwn_list is a subset of disk_naa_list
-  debug:
+- name: If volume_wwn_list is a subset of disk_naa_list
+  ansible.builtin.debug:
     msg: "if volume_wwn_list is a subset of disk_naa_list: {{ is_subset }}"
-
-- name: Find the difference between disk_naa_list and volume_wwn_list
-  set_fact:
-    difference: "{{ disk_naa_list | difference(volume_wwn_list) }}"
-
-- name: Print the difference between the two lists
-  debug:
-    msg: "The difference between disk_naa_list and volume_wwn_list is: {{ difference }}"
+  when: debug_mode | default(false)

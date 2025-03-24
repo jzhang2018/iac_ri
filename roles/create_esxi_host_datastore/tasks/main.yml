@@ -2,59 +2,15 @@
 # tasks file for create_esxi_host_datastore
 
 # Workflow: rescan vcenter ESXi hosts HBA subsystem -> get vcenter EXSi host disk info and match to those volumes' wwn 
-#   -> mount datastore on ESXi host
+#   -> mount datastore on ESXi host (one host) -> rescan (to make the datastores are available to all hosts in the cluster)
 
-# VCenter host connection
-- name: Set vcenter common connection
-  ansible.builtin.set_fact:
-    vcenter_connection_vars: &vcenter_connection_vars
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: "{{ vcenter_validate_certs }}"
+- name: Rescan cluster
+  ansible.builtin.include_tasks: rescan_cluster.yml
 
-- name: Rescan a given cluster and refresh storage system objects
-  community.vmware.vmware_host_scanhba:
-    <<: *vcenter_connection_vars
-    cluster_name: "{{ vcenter_cluster_name }}"
-    refresh_storage: true
-    rescan_vmfs: true
-    rescan_hba: true
-  register: rescan_results
-
-- name: Print out rescan cluster results
-  ansible.builtin.debug:
-    msg: "{{ rescan_results }}"
-  when: debug_mode | default(false)  
-
-- name: Gather all ESXi host disk info in the given cluster
-  community.vmware.vmware_host_disk_info:
-    <<: *vcenter_connection_vars
-    cluster_name: '{{ vcenter_cluster_name }}'
-  register: cluster_host_disk_info
-
-- name: Print out host disk info
-  ansible.builtin.debug:
-    msg: "{{ cluster_host_disk_info.hosts_disk_info }}"
-  when: debug_mode | default(false) 
-
-# Check if PowerMax volumes' wwn are in naa list or not
-- name: Include a task that check if wwn is in naa
+- name: Check if PowerMax volumes' wwn are in vcenter ESXI hosts' naa list or not
   ansible.builtin.include_tasks: wwn_in_naa_list.yml
 
-# create ds with volumes wwn list only volume_wwn_list is a subset of disk_naa_list
-# - name: Mount VMFS datastores to ESXi
-#   community.vmware.vmware_host_datastore:
-#     <<: *vcenter_connection_vars
-#     datastore_name: '{{ item.name }}' # TODO
-#     datastore_type: 'vmfs'
-#     vmfs_device_name: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # just wwn
-#     vmfs_version: 6
-#     esxi_hostname: '{{ inventory_hostname }}'
-#     state: present
-  
-
-
-
-
+- name: Create datastore at cluster level IF wwn is in naa list and rescan cluster
+  ansible.builtin.include_tasks: mount_datastore.yml
+  when: is_subset
 

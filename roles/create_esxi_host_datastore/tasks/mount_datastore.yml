@@ -1,0 +1,34 @@
+---
+
+- name: Set vcenter common connection
+  ansible.builtin.set_fact:
+    vcenter_connection_vars: &vcenter_connection_vars
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: "{{ vcenter_validate_certs }}"
+
+- name: Create datastores to ESXi host
+  community.vmware.vmware_host_datastore:
+    <<: *vcenter_connection_vars
+    datastore_name: "{{ unisphere_array_name }}-{{ vcenter_cluster_name }}-{{ item.value }}" # arrayname-clustername-volumnid-data.xx
+    datastore_type: 'vmfs'
+    vmfs_device_name: "{{ item.value }}" # wwn
+    vmfs_version: 6
+    esxi_hostname: "{{ host_list[0] }}" # only for one ESXi host
+    state: present
+  loop: "{{ volume_dict | dict2items }}"
+  register: ds
+
+- name: Print out datastore
+  ansible.builtin.debug:
+    msg: "{{ ds }}"
+  when: debug_mode | default(false) 
+
+- name: Rescan after mount datastore
+  community.vmware.vmware_host_scanhba:
+    <<: *vcenter_connection_vars
+    cluster_name: "{{ vcenter_cluster_name }}"
+    refresh_storage: true
+    rescan_vmfs: true
+    rescan_hba: true

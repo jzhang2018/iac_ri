@@ -22,7 +22,7 @@
 - name: Create volume dict (key is volume_identifier and value is WWN) for future reference
   set_fact:
     volume_dict: >-
-      {{ volume_dict | default({}) | combine({item.volume_details.volume_identifier: item.volume_details.wwn}) }}
+      {{ volume_dict | default({}) | combine({ item.volume_details.wwn: item.volume_details.volume_identifier }) }}
   loop: "{{ volumes_info.results }}"
 
 - name: Print out volume_dict

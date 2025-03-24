@@ -19,6 +19,7 @@ unisphere_password: !vault |
 # serial number
 unisphere_serial_no: '000220002205'
 unisphere_serial_no2: '000120003200'
+unisphere_array_name: 'Tesla-Array1' # FQDN of unisphere host
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # vcenter variables
