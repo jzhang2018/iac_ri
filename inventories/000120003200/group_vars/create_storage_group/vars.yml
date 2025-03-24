@@ -1,6 +1,1 @@
 ---
-# volume count
-volume_index: 3
-
-# size in GB for all the new volumes
-size: 16

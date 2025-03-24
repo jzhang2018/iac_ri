@@ -1,7 +1,6 @@
 ---
 - name: Create storage group
   ansible.builtin.include_tasks: create_storage_group.yml
-  tags: [empty_sg, volumes_sg]
 
-# - name: Assertion test
-#   ansible.builtin.include_tasks: assert.yml
+- name: Assertion test
+  ansible.builtin.include_tasks: assert.yml

@@ -1,9 +1,24 @@
 ---
 
+# Data manipulation 
+- name: Flatten and extract display_name values from  cluster_host_disk_info
+  ansible.builtin.set_fact:
+    display_names: "{{ cluster_host_disk_info.hosts_disk_info | dict2items | map(attribute='value') | list | flatten  | selectattr('display_name', 'search', '\\(naa\\.') }}"
+
+- name: Extract disks' naa into a list using regex
+  ansible.builtin.set_fact:
+    disk_naa_list: "{{ display_names | map(attribute='display_name') | map('regex_replace', '.*\\(naa\\.(.*?)\\)', '\\1') | list }}"
+
+- name: Print out disk_naa_list
+  ansible.builtin.debug:
+    msg: "{{ disk_naa_list }}"
+  when: debug_mode | default(false) 
+
 - name: Fail if volume wwn is not avalable or empty
   ansible.builtin.fail:
     msg: "PowerMax volume creation is not done correctly as the wwn list is not avaible or empty!"
   when: volume_wwn_list is not defined or volume_wwn_list | length == 0
+# TODO: graceful error handling
 
 - name: Check if volume_wwn_list is a subset of disk_naa_list
   ansible.builtin.set_fact:

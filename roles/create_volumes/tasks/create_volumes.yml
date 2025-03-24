@@ -1,0 +1,34 @@
+---
+
+# tasks file for create_volumes
+- name: Set unisphere common connection
+  ansible.builtin.set_fact:
+    uni_connection_vars: &uni_connection_vars
+      unispherehost: "{{ unisphere_host }}"
+      universion: "{{ unisphere_version }}"
+      user: "{{ unisphere_user }}"
+      password: "{{ unisphere_password }}"
+      verifycert: "{{ unisphere_verifycert }}"
+      serial_no: "{{ unisphere_serial_no }}"
+
+- name: Create volumes for newly created storage group
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.volume:
+    <<: *uni_connection_vars
+    vol_name: "{{ vcenter_cluster_name + '_DATA.' }}{{ item }}"
+    sg_name: "{{ vcenter_cluster_name }}_SG"  # Storage group name should be along with volume name
+    size: "{{ size }}"
+    cap_unit: 'TB'
+    state: 'present'
+  loop: "{{ range(0, volume_index, 1) | list }}" # 0, 1, 2
+  register: volumes_info
+
+- name: Set variable volumnes for future reference
+  ansible.builtin.set_fact:
+    volume_wwn_list: "{{ volumes_info.results | json_query('[*].volume_details.wwn') }}"
+
+- name: Print out newly created volumes' wwn
+  ansible.builtin.debug:
+    msg: "{{ volume_wwn_list }}"
+  when: debug_mode | default(false)

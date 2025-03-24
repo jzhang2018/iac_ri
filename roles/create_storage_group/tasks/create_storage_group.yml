@@ -14,46 +14,45 @@
       verifycert: "{{ unisphere_verifycert }}"
       serial_no: "{{ unisphere_serial_no }}"
 
-- name: Block - create storage group tasks
-  tags: empty_sg
-  block:
-  - name: Create empty storage group
-    collections:
-      - dellemc.powermax
-    dellemc.powermax.storagegroup:
-      <<: *uni_connection_vars
-      sg_name: "{{ vcenter_cluster_name }}_SG"
-      # service_level: "Diamond"
-      # srp: "SRP_1"
-      # compression: true
-      state: 'present'
-    register: create_sg
-    
-  - name: Set variable storgegroup_name for future reference
-    ansible.builtin.set_fact:
-      storagegroup_name: "{{ create_sg.storage_group_details.storageGroupId }}"
-    
-- name: Block - create volumes and add them to storage group tasks
-  tags: volumes_sg
-  block:
-  - name: Create volumes for newly created storage group
-    collections:
-      - dellemc.powermax
-    dellemc.powermax.volume:
-      <<: *uni_connection_vars
-      vol_name: "{{ vcenter_cluster_name + '_DATA.' }}{{ item }}"
-      sg_name: "{{ vcenter_cluster_name }}_SG"  # Storage group name should be along with volume name
-      size: "{{ size }}"
-      cap_unit: 'TB'
-      state: 'present'
-    loop: "{{ range(0, volume_index, 1) | list }}" # 0, 1, 2
-    register: volumes_info
+- name: Create empty storage group
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.storagegroup:
+    <<: *uni_connection_vars
+    sg_name: "{{ vcenter_cluster_name }}_SG"
+    # service_level: "Diamond"
+    # srp: "SRP_1"
+    # compression: true
+    state: 'present'
+  register: create_sg
+  
+- name: Set variable storgegroup_name for future reference
+  ansible.builtin.set_fact:
+    storagegroup_name: "{{ create_sg.storage_group_details.storageGroupId }}"
 
-  - name: Set variable volumnes for future reference
-    ansible.builtin.set_fact:
-      volume_wwn_list: "{{ volumes_info.results | json_query('[*].volume_details.wwn') }}"
+- name: Print out newly created storage group
+  ansible.builtin.debug:
+    msg: "{{ storagegroup_name }}"
+  when: debug_mode | default(false)
 
-  - name: Print out newly created volumes' wwn
-    ansible.builtin.debug:
-      msg: "{{ volume_wwn_list }}"
-    when: debug_mode | default(false)
+# - name: Create volumes for newly created storage group
+#   collections:
+#     - dellemc.powermax
+#   dellemc.powermax.volume:
+#     <<: *uni_connection_vars
+#     vol_name: "{{ vcenter_cluster_name + '_DATA.' }}{{ item }}"
+#     sg_name: "{{ vcenter_cluster_name }}_SG"  # Storage group name should be along with volume name
+#     size: "{{ size }}"
+#     cap_unit: 'TB'
+#     state: 'present'
+#   loop: "{{ range(0, volume_index, 1) | list }}" # 0, 1, 2
+#   register: volumes_info
+
+# - name: Set variable volumnes for future reference
+#   ansible.builtin.set_fact:
+#     volume_wwn_list: "{{ volumes_info.results | json_query('[*].volume_details.wwn') }}"
+
+# - name: Print out newly created volumes' wwn
+#   ansible.builtin.debug:
+#     msg: "{{ volume_wwn_list }}"
+#   when: debug_mode | default(false)

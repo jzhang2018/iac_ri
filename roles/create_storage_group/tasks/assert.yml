@@ -1,7 +1,7 @@
 ---
 
-# Assertion gets called when a new storage group is created with newly created volumes defined in inventory
-- name: Get newly created storage group details including volumes
+# Assertion gets called when a new storage group is created
+- name: Get newly created storage group
   dellemc.powermax.storagegroup:
     unispherehost: "{{ unisphere_host }}"
     universion: "{{ unisphere_version }}"
@@ -13,24 +13,24 @@
     state: 'present'
   register: assert_sg
 
-- name: Print out newly created storage group details including volumes
+- name: Print out newly created storage group details
   ansible.builtin.debug:
     msg: "{{ assert_sg }}"
   when: debug_mode | default(false)
 
-- name: Initialize an empty list for composing volume id
-  ansible.builtin.set_fact:
-    composed_volume_ids: []
+# - name: Initialize an empty list for composing volume id
+#   ansible.builtin.set_fact:
+#     composed_volume_ids: []
 
-- name: Append volume id to a list based on the inventory and naming convention
-  ansible.builtin.set_fact:
-    composed_volume_ids: "{{ composed_volume_ids + [vcenter_cluster_name + '_DATA.' + item | string] }}"
-  loop: "{{ range(0, volume_index, 1) | list }}"
+# - name: Append volume id to a list based on the inventory and naming convention
+#   ansible.builtin.set_fact:
+#     composed_volume_ids: "{{ composed_volume_ids + [vcenter_cluster_name + '_DATA.' + item | string] }}"
+#   loop: "{{ range(0, volume_index, 1) | list }}"
 
-- name: Print out composed volume id list
-  ansible.builtin.debug:
-    msg: "{{ composed_volume_ids }}"
-  when: debug_mode | default(false)
+# - name: Print out composed volume id list
+#   ansible.builtin.debug:
+#     msg: "{{ composed_volume_ids }}"
+#   when: debug_mode | default(false)
 
 - name: Assert multiple conditions separately - storage group with volumes
   ansible.builtin.assert:
@@ -39,6 +39,6 @@
     success_msg: "This assertion passed!"
   loop:
     - { condition: "(vcenter_cluster_name + '_SG') == assert_sg.storage_group_details.storageGroupId", msg: "storage group name does not match expected value" }
-    - { condition: "volume_index <= assert_sg.storage_group_details.num_of_vols", msg: "volume count does not match expected value" }
-    - { condition: "((composed_volume_ids | map('lower')) | sort) <= ((( assert_sg.storage_group_volumes_details | map(attribute = 'volume_identifier') | list) | map('lower')) | sort)",
-        msg: "volume ids do not match expected values" }
+    # - { condition: "volume_index <= assert_sg.storage_group_details.num_of_vols", msg: "volume count does not match expected value" }
+    # - { condition: "((composed_volume_ids | map('lower')) | sort) <= ((( assert_sg.storage_group_volumes_details | map(attribute = 'volume_identifier') | list) | map('lower')) | sort)",
+    #     msg: "volume ids do not match expected values" }

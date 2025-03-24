@@ -13,7 +13,6 @@
       password: '{{ vcenter_password }}'
       validate_certs: "{{ vcenter_validate_certs }}"
 
-# rescan
 - name: Rescan a given cluster and refresh storage system objects
   community.vmware.vmware_host_scanhba:
     <<: *vcenter_connection_vars
@@ -28,30 +27,15 @@
     msg: "{{ rescan_results }}"
   when: debug_mode | default(false)  
 
-# get vmware_host_vmhba_info?
-- name: Gather info about vmhbas of all ESXi Host in the given Cluster
+- name: Gather all ESXi host disk info in the given cluster
   community.vmware.vmware_host_disk_info:
     <<: *vcenter_connection_vars
     cluster_name: '{{ vcenter_cluster_name }}'
-  register: cluster_host_vmhbas
+  register: cluster_host_disk_info
 
-- name: Print out cluster_host_vmhbas
+- name: Print out host disk info
   ansible.builtin.debug:
-    msg: "{{ cluster_host_vmhbas.hosts_disk_info }}"
-  when: debug_mode | default(false) 
-
-# data compare  
-- name: Flatten and extract display_name values
-  ansible.builtin.set_fact:
-    display_names: "{{ cluster_host_vmhbas.hosts_disk_info | dict2items | map(attribute='value') | list | flatten  | selectattr('display_name', 'search', '\\(naa\\.') }}"
-
-- name: Extract disks' naa into a list using regex
-  ansible.builtin.set_fact:
-    disk_naa_list: "{{ display_names | map(attribute='display_name') | map('regex_replace', '.*\\(naa\\.(.*?)\\)', '\\1') | list }}"
-
-- name: Print out disk_naa_list
-  ansible.builtin.debug:
-    msg: "{{ disk_naa_list }}"
+    msg: "{{ cluster_host_disk_info.hosts_disk_info }}"
   when: debug_mode | default(false) 
 
 # Check if PowerMax volumes' wwn are in naa list or not
