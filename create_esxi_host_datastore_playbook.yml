@@ -72,4 +72,3 @@
 
   roles:
     - create_esxi_host_datastore
-

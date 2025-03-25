@@ -1,7 +1,7 @@
 ---
 # tasks file for create_esxi_host_datastore
 
-# Workflow: rescan vcenter ESXi hosts HBA subsystem -> get vcenter EXSi host disk info and match to those volumes' wwn 
+# Workflow: rescan vcenter ESXi hosts HBA subsystem -> get vcenter EXSi host disk info and match to those volumes' wwn
 #   -> mount datastore on ESXi host (one host) -> rescan (to make the datastores are available to all hosts in the cluster)
 
 - name: Rescan cluster

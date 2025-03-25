@@ -23,7 +23,7 @@
 - name: Print out datastore
   ansible.builtin.debug:
     msg: "{{ ds }}"
-  when: debug_mode | default(false) 
+  when: debug_mode | default(false)
 
 - name: Rescan after mount datastore
   community.vmware.vmware_host_scanhba:
