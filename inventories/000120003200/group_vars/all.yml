@@ -1,0 +1,48 @@
+---
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# unisphere variables
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# unisphere connection
+unisphere_host: 'vespa-mgmt1.gslabs.lab.emc.com'
+unisphere_version: '101'
+unisphere_verifycert: false
+unisphere_user: 'smc'
+unisphere_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  66336333323238323864623034613363326434303562636231366139376661633635316161643066
+  6263663562613538326463303235306562613464343736350a346634343033646630333434613766
+  34653630616436366565353462323861333939313031373862346666376434626130343936346532
+  3064303166636238380a356437313733303134393135666566373730656139343938383165316339
+  3837
+
+# serial number
+unisphere_serial_no: '000220002205'
+unisphere_serial_no2: '000120003200'
+unisphere_array_name: 'Tesla-Array1' # FQDN of unisphere host
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# vcenter variables
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# vcenter connection
+vcenter_hostname: '10.60.17.97'
+vcenter_username: 'administrator@vsphere.local'
+vcenter_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66393336323439633734636366646163643833376439376430366638643735326364363137353862
+          3033363363663336356464336666663365653537613632320a633662383665333630383037656331
+          34313136303466623765666362363032363936353963653535373838633263343931393161316231
+          3230383664313963650a393035393031363536646661393936353564393933613461303637383836
+          3933
+vcenter_validate_certs: false
+
+# vcenter cluster name
+vcenter_cluster_name: 'Tesla-Cluster'
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# other variables
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ansible_python_interpreter: '/usr/bin/python3.11'
+# ansible_user:
+inventory_groupvars_dir: "inventories/{{ unisphere_serial_no2 }}/group_vars"
+# inventory_groupvars_dir: "inventories/000120003200/group_vars"

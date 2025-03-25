@@ -1,0 +1,25 @@
+---
+# tasks file for gather_vcenter_cluster_info
+- name: Gather info about vmhbas of all ESXi Host in the given Cluster
+  community.vmware.vmware_host_vmhba_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    cluster_name: '{{ vcenter_cluster_name }}'
+    validate_certs: "{{ vcenter_validate_certs }}"
+  register: cluster_hosts_vmhbas
+
+- name: Print out cluster hosts vmhbas details
+  ansible.builtin.debug:
+    msg: "{{ cluster_hosts_vmhbas.hosts_vmhbas_info }}"  # type_debug: dict
+  when: debug_mode | default(false)
+
+# Extract hosts' port_wwn for those type of Fibre Channel with online status and construct a list of dict, in which the key
+# is the host name and the value is a list of port_wwn
+- name: Extract fibre channel type host and port_wwn into a list
+  ansible.builtin.set_fact:
+    online_fibre_channel_host_list: >-
+      {{
+        cluster_hosts_vmhbas.hosts_vmhbas_info | dict2items |
+        json_query('[*].{host: key, port_wwn: value.vmhba_details[?type==`Fibre Channel`&&status==`online`].port_wwn}')
+      }}

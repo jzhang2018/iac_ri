@@ -1,0 +1,15 @@
+---
+# tasks file for create_esxi_host_datastore
+
+# Workflow: rescan vcenter ESXi hosts HBA subsystem -> get vcenter EXSi host disk info and match to those volumes' wwn
+#   -> mount datastore on ESXi host (one host) -> rescan (to make the datastores are available to all hosts in the cluster)
+
+- name: Rescan cluster
+  ansible.builtin.include_tasks: rescan_cluster.yml
+
+- name: Check if PowerMax volumes' wwn are in vcenter ESXI hosts' naa list or not
+  ansible.builtin.include_tasks: wwn_in_naa_list.yml
+
+- name: Create datastore at cluster level IF wwn is in naa list and rescan cluster
+  ansible.builtin.include_tasks: mount_datastore.yml
+  when: is_subset

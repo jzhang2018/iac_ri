@@ -1,0 +1,24 @@
+---
+# tasks file for create_maskingview
+
+- name: Create MV with hostgroup, storage group and port group
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.maskingview:
+    unispherehost: "{{ unisphere_host }}"
+    universion: "{{ unisphere_version }}"
+    user: "{{ unisphere_user }}"
+    password: "{{ unisphere_password }}"
+    verifycert: "{{ unisphere_verifycert }}"
+    serial_no: "{{ unisphere_serial_no }}"
+    mv_name: "{{ vcenter_cluster_name }}_MV"
+    portgroup_name: "{{ portgroup_name }}"
+    hostgroup_name: "{{ hostgroup_name }}"
+    sg_name: "{{ storagegroup_name }}"
+    state: "present"
+  register: mv
+
+- name: Print out create_maskingview
+  ansible.builtin.debug:
+    msg: "{{ mv }}"
+  when: debug_mode | default(false)

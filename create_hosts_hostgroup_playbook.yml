@@ -1,0 +1,8 @@
+---
+- name: Create hosts and hostgroup play
+  hosts: create_hosts_hostgroup
+  connection: local
+  gather_facts: false
+
+  roles:
+    - create_hosts_hostgroup

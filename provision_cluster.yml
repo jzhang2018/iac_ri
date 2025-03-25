@@ -1,8 +1,0 @@
----
-- name: Provision Cluster
-  hosts: provision_cluster
-  connection: local
-  gather_facts: false
-
-  roles:
-    - provision_cluster

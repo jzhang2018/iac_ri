@@ -1,0 +1,6 @@
+---
+- name: Create port group
+  ansible.builtin.include_tasks: create_port_group.yml
+
+- name: Assertion test
+  ansible.builtin.include_tasks: assert.yml

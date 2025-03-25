@@ -1,0 +1,74 @@
+---
+- name: Create ESXi Host Datastore Play
+  hosts: create_esxi_host_datastore
+  connection: local
+  gather_facts: false
+
+  pre_tasks:
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_hosts_hostgroup
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    - name: Load create_hosts_hostgroup variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_hosts_hostgroup/vars.yml"
+
+    - name: Run role create_hosts_hostgroup
+      ansible.builtin.include_role:
+        name: create_hosts_hostgroup
+
+    - name: Get hostgroup_name for Masking View
+      ansible.builtin.debug:
+        msg: "{{ hostgroup_name }}"
+      when: debug_mode | default(false)
+
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_storage_group
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    - name: Load create_storage_group variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_storage_group/vars.yml"
+
+    - name: Run role create_storage_group
+      ansible.builtin.include_role:
+        name: create_storage_group
+
+    - name: Get storagegroup_name for Masking View
+      ansible.builtin.debug:
+        msg: "{{ storagegroup_name }}"
+      when: debug_mode | default(false)
+
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_port_group
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    - name: Load create_port_group variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_port_group/vars.yml"
+
+    - name: Run role create_port_group
+      ansible.builtin.include_role:
+        name: create_port_group
+
+    - name: Get portgroup_name for Masking View
+      ansible.builtin.debug:
+        msg: "{{ portgroup_name }}"
+      when: debug_mode | default(false)
+
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_maskingview
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    - name: Load create_maskingview variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_maskingview/vars.yml"
+
+    - name: Run role create_maskingview
+      ansible.builtin.include_role:
+        name: create_maskingview
+
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_volumes
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    - name: Load create_volumes variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_volumes/vars.yml"
+
+    - name: Run role create_volumes
+      ansible.builtin.include_role:
+        name: create_volumes
+
+  roles:
+    - create_esxi_host_datastore

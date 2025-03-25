@@ -1,0 +1,36 @@
+---
+# tasks file for create_storage_group
+# workflow: user provides storage group name and the index of volumes -> create empty storgare group
+#   -> create volumes based on the naming convention and the index requested
+#   -> add newly created volumes to the storage group
+
+- name: Set unisphere common connection
+  ansible.builtin.set_fact:
+    uni_connection_vars: &uni_connection_vars
+      unispherehost: "{{ unisphere_host }}"
+      universion: "{{ unisphere_version }}"
+      user: "{{ unisphere_user }}"
+      password: "{{ unisphere_password }}"
+      verifycert: "{{ unisphere_verifycert }}"
+      serial_no: "{{ unisphere_serial_no }}"
+
+- name: Create empty storage group
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.storagegroup:
+    <<: *uni_connection_vars
+    sg_name: "{{ vcenter_cluster_name }}_SG"
+    # service_level: "Diamond"
+    # srp: "SRP_1"
+    # compression: true
+    state: 'present'
+  register: create_sg
+
+- name: Set variable storgegroup_name for future reference
+  ansible.builtin.set_fact:
+    storagegroup_name: "{{ create_sg.storage_group_details.storageGroupId }}"
+
+- name: Print out newly created storage group
+  ansible.builtin.debug:
+    msg: "{{ storagegroup_name }}"
+  when: debug_mode | default(false)

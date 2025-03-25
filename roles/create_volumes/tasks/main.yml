@@ -1,0 +1,7 @@
+---
+
+- name: Create volumes
+  ansible.builtin.include_tasks: create_volumes.yml
+
+- name: Assertion test
+  ansible.builtin.include_tasks: assert.yml
