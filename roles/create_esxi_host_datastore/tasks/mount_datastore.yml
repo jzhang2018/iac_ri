@@ -11,7 +11,7 @@
 - name: Create datastores to ESXi host
   community.vmware.vmware_host_datastore:
     <<: *vcenter_connection_vars
-    datastore_name: "{{ unisphere_array_name }}-{{ vcenter_cluster_name }}-{{ item.value }}" # arrayname-clustername-volumnid-data.xx
+    datastore_name: "{{ unisphere_host | split('.') | first | upper }}-{{ vcenter_cluster_name }}-{{ item.value }}" # arrayname-clustername-volumnid-data.xx
     datastore_type: 'vmfs'
     vmfs_device_name: "{{ item.value }}" # wwn
     vmfs_version: 6
