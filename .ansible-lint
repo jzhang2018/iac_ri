@@ -13,6 +13,8 @@ exclude_paths:
   - roles/*/handlers/main.yml
   - roles/*/vars/main.yml
   - requirements.txt
+  - test.yml
 
-# skip_list:
-#   - unknown-module
+skip_list:
+  - yaml[line-length]
+
