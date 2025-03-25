@@ -13,4 +13,3 @@
 - name: Create datastore at cluster level IF wwn is in naa list and rescan cluster
   ansible.builtin.include_tasks: mount_datastore.yml
   when: is_subset
-

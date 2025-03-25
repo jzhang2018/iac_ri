@@ -1,1 +1,6 @@
-#
+# requirements for ansible-lint
+ansible
+ansible-lint
+jmespath
+pyvmomi
+PyU4V==10.1.0.0

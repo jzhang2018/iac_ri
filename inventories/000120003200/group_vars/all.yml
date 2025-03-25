@@ -4,7 +4,7 @@
 # unisphere variables
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # unisphere connection
-unisphere_host: '10.60.8.152'
+unisphere_host: 'vespa-mgmt1.gslabs.lab.emc.com'
 unisphere_version: '101'
 unisphere_verifycert: false
 unisphere_user: 'smc'
