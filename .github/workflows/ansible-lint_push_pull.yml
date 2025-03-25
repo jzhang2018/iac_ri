@@ -25,7 +25,7 @@ jobs:
 
       - name: Install required Ansible collections
         run: |
-          ansible-galaxy collection install dell.emc.powermax community.vmware --ignore-cert
+          ansible-galaxy collection install dellemc.powermax community.vmware --ignore-cert
 
       # - name: Run ansible lint
       #   uses: ansible/ansible-lint@v6.17.0
