@@ -18,7 +18,6 @@ unisphere_password: !vault |
 
 # serial number
 unisphere_serial_no: '000220002205'
-unisphere_serial_no2: '000120003200'
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # vcenter variables
@@ -43,5 +42,5 @@ vcenter_cluster_name: 'Tesla-Cluster'
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ansible_python_interpreter: '/usr/bin/python3.11'
 # ansible_user:
-inventory_groupvars_dir: "inventories/{{ unisphere_serial_no2 }}/group_vars"
-# inventory_groupvars_dir: "inventories/000120003200/group_vars"
+# inventory_groupvars_dir: "inventories/{{ unisphere_serial_no }}/group_vars"
+inventory_groupvars_dir: "inventories/000120003200/group_vars"  # comment out this line (DT lab only)
