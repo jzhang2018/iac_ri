@@ -43,15 +43,20 @@
     vol_name: "{{ vcenter_cluster_name + '_DATA.' }}{{ item }}"
     sg_name: "{{ vcenter_cluster_name }}_SG"  # Storage group name should be along with volume name
     size: "{{ size }}"
-    cap_unit: 'TB'
+    cap_unit: 'GB'
     state: 'present'
   loop: "{{ range(0, volume_index, 1) | list }}" # 0, 1, 2
   register: volumes_info
 
-- name: Create volume dict (key is volume_identifier and value is WWN) for future reference
+- name: Print out volumes_info
+  ansible.builtin.debug:
+    msg: "{{ volumes_info }}"
+  when: debug_mode | default(false)
+
+- name: Create volume dict (key is wwn and value is volumeId-DATA.xx) for future reference
   ansible.builtin.set_fact:
     volume_dict: >-
-      {{ volume_dict | default({}) | combine({item.volume_details.wwn: item.volume_details.volume_identifier}) }}
+      {{ volume_dict | default({}) | combine({item.volume_details.wwn: item.volume_details.volumeId + '-' + item.volume_details.volume_identifier.split('_')[1]}) }}
   loop: "{{ volumes_info.results }}"
 
 - name: Print out volume_dict
