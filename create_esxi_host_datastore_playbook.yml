@@ -60,15 +60,5 @@
       ansible.builtin.include_role:
         name: create_maskingview
 
-    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # pre-task: create_volumes
-    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    - name: Load create_volumes variables
-      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_volumes/vars.yml"
-
-    - name: Run role create_volumes
-      ansible.builtin.include_role:
-        name: create_volumes
-
   roles:
     - create_esxi_host_datastore
