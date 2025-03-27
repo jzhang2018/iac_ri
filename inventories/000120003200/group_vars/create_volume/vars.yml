@@ -1,0 +1,7 @@
+---
+
+# how many volume to be created
+volume_count: 0
+
+# size in GB for all the new volumes
+size: 16

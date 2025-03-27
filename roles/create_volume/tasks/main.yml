@@ -1,0 +1,61 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for create_volume
+
+
+# we need to check the volume count in the given storage group. Increment the new volume based on the volume_index/volume_count
+
+- name: Set unisphere common connection
+  ansible.builtin.set_fact:
+    uni_connection_vars: &uni_connection_vars
+      unispherehost: "{{ unisphere_host }}"
+      universion: "{{ unisphere_version }}"
+      user: "{{ unisphere_user }}"
+      password: "{{ unisphere_password }}"
+      verifycert: "{{ unisphere_verifycert }}"
+      serial_no: "{{ unisphere_serial_no }}"
+
+- name: Get volume count in the storage group
+  dellemc.powermax.storagegroup:
+    <<: *uni_connection_vars
+    sg_name: "{{ vcenter_cluster_name }}_SG"
+    state: "present"
+  register: sg_info
+
+- name: Current volume count in the storage group
+  ansible.builtin.set_fact:
+    current_volume_count: "{{ sg_info.storage_group_details.num_of_vols }}"
+
+- name: Print out volume count in the storage group
+  ansible.builtin.debug:
+    msg: "{{ current_volume_count }}"
+  when: debug_mode | default(false)
+
+- name: Create volumes for newly created storage group
+  collections:
+    - dellemc.powermax
+  dellemc.powermax.volume:
+    <<: *uni_connection_vars
+    vol_name: "{{ vcenter_cluster_name + '_DATA.' }}{{ item }}"
+    sg_name: "{{ vcenter_cluster_name }}_SG"  # Storage group name should be along with volume name
+    size: "{{ size }}"
+    cap_unit: 'GB'
+    state: 'present'
+  loop: "{{ range(0, current_volume_count | int + volume_count | int, 1) | list }}" # 0, 1, 2
+  register: volumes_info
+
+- name: Print out volumes_info
+  ansible.builtin.debug:
+    msg: "{{ volumes_info }}"
+  when: debug_mode | default(false)
+
+- name: Create volume dict (key is wwn and value is volumeId-DATA.xx) for future reference
+  ansible.builtin.set_fact:
+    volume_dict: >-
+      {{ volume_dict | default({}) | combine({item.volume_details.wwn: item.volume_details.volumeId + '-' + item.volume_details.volume_identifier.split('_')[1]}) }}
+  loop: "{{ volumes_info.results }}"
+
+- name: Print out volume_dict
+  ansible.builtin.debug:
+    msg: "{{ volume_dict }}"
+  when: debug_mode | default(false)
