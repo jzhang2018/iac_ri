@@ -1,0 +1,19 @@
+---
+- name: Add Volume and ESXi Host Datastore Play
+  hosts: create_volume
+  connection: local
+  gather_facts: false
+
+  pre_tasks:
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_volume
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    - name: Load create_volume variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_volume/vars.yml"
+
+    - name: Run role create_volume
+      ansible.builtin.include_role:
+        name: create_volume
+
+  roles:
+    - create_esxi_host_datastore
