@@ -5,3 +5,6 @@ volume_count: 2
 
 # size in GB for all the new volumes
 size: 16
+
+# capacity unit: GB, TB
+cap_unit: 'GB'
