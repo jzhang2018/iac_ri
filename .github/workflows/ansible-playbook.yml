@@ -1,9 +1,9 @@
 name: Run Ansible Playbook
 
 on:
-  push:
-    branches:
-      - dev
+  # push:
+  #   branches:
+  #     - dev
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
