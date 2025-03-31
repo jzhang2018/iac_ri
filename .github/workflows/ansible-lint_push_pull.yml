@@ -8,27 +8,27 @@ on:
 
 jobs:
   AnsibleLint:
-    runs-on: ubuntu-latest     # name of a container (environment) to run your automations in
+    # runs-on: ubuntu-latest     # name of a container (environment) to run your automations in
+    runs-on: self-hosted
+
     steps:
-      - name: check code out from github into "ubuntu-latest"
+      - name: check code out from github into 'self-hosted' runner
         uses: actions/checkout@v4.2.1
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      # - name: Set up Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.11'
 
-      - name: Install Ansible and dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install ansible ansible-lint jmespath pyvmomi PyU4V==10.1.0.0
+      # - name: Install Ansible and dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install ansible ansible-lint jmespath pyvmomi PyU4V==10.1.0.0
 
-      - name: Install required Ansible collections
-        run: |
-          ansible-galaxy collection install dellemc.powermax community.vmware --ignore-cert
+      # - name: Install required Ansible collections
+      #   run: |
+      # ansible-galaxy collection install dellemc.powermax community.vmware --ignore-cert
 
-      # - name: Run ansible lint
-      #   uses: ansible/ansible-lint@v6.17.0
       - name: Run ansible-lint
         run: |
           ansible-lint
