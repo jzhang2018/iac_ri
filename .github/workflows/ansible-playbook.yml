@@ -3,8 +3,35 @@ name: Run Ansible Playbook
 on:
   workflow_dispatch:  # Allows manual triggering
     inputs:
-      playbooks:
+      array:
+        description: 'Select storage array'
+        required: true
+        type: choice
+        options:
+          - '000120003200'
 
+      playbook:
+        description: 'Select Ansible Playbook to run...'
+        required: true
+        type: choice
+        options:
+          - 'create_hosts_hostgroup_playbook.yml'
+          - 'create_port_group_playbook.yml'
+          - 'create_storage_group_playbook.yml
+          - 'create_volume_playbook.ym'
+          - 'create_maskingview_playbook.yml'
+          - 'create_esxi_host_datastore_playbook.yml'
+          - 'create_esxi_host_datastore_playbook.yml'
+          - 'add_volume_datastore_playbook.yml'
+
+      debug:
+        description: 'Playbook debug mode'
+        required: false
+        default: 'false'
+        type: boolean
+        options:
+          - true
+          - false
 
 jobs:
   ansible-playbook:
@@ -15,5 +42,9 @@ jobs:
         uses: actions/checkout@v4.2.1
 
       - name: Run Ansible Playbook
+        env:
+          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
         run: |
-          ansible-playbook -i inventories/000120003200 add_volume_datastore_playbook.yml -e "debug_mode=true" --ask-vault-pass
+          echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt
+          ansible-playbook -i inventories/${{ github.event.inputs.array }} {{ github.event.inputs.playbook }} -e "debug_mode={{ github.event.inputs.debug }}" --vault-password-file vault_pass.txt
+          rm -f vault_pass.txt
