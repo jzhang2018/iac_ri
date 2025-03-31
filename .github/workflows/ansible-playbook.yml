@@ -1,0 +1,29 @@
+name: Run Ansible Playbook
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  ansible-playbook:
+    runs-on: self-hosted
+
+    steps:
+      - name: check code out from github into 'self-hosted' runner
+        uses: actions/checkout@v4.2.1
+
+      # - name: Set up Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.11'
+
+      # - name: Install Ansible
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install -y ansible
+
+      - name: Run Ansible Playbook
+        run: |
+          ansible-playbook -i inventories/000120003200 add_volume_datastore_playbook.yml -e "debug_mode=true" --vault-password-file ~/.vp
