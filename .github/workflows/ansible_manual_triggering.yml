@@ -17,8 +17,8 @@ on:
         options:
           - 'create_hosts_hostgroup_playbook.yml'
           - 'create_port_group_playbook.yml'
-          - 'create_storage_group_playbook.yml
-          - 'create_volume_playbook.ym'
+          - 'create_storage_group_playbook.yml'
+          - 'create_volume_playbook.yml'
           - 'create_maskingview_playbook.yml'
           - 'create_esxi_host_datastore_playbook.yml'
           - 'create_esxi_host_datastore_playbook.yml'
@@ -27,7 +27,7 @@ on:
       debug:
         description: 'Playbook debug mode'
         required: false
-        default: 'false'
+        default: false
         type: boolean
         options:
           - true
