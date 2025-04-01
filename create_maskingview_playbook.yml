@@ -37,6 +37,16 @@
       when: debug_mode | default(false)
 
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # pre-task: create_volume
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    - name: Load create_volume variables
+      ansible.builtin.include_vars: "{{ inventory_groupvars_dir }}/create_volume/vars.yml"
+
+    - name: Run role create_volume
+      ansible.builtin.include_role:
+        name: create_volume
+
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # pre-task: create_port_group
     # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     - name: Load create_port_group variables

@@ -1,8 +1,0 @@
----
-- name: Create Volumes Play
-  hosts: create_volumes
-  connection: local
-  gather_facts: false
-
-  roles:
-    - role: create_volumes

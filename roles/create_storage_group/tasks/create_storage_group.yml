@@ -1,9 +1,5 @@
 ---
 # tasks file for create_storage_group
-# workflow: user provides storage group name and the index of volumes -> create empty storgare group
-#   -> create volumes based on the naming convention and the index requested
-#   -> add newly created volumes to the storage group
-
 - name: Set unisphere common connection
   ansible.builtin.set_fact:
     uni_connection_vars: &uni_connection_vars
