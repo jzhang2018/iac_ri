@@ -46,6 +46,6 @@ jobs:
           ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
         run: |
           echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt
-          echo "playbook: "{{ github.event.inputs.playbook }}
+          echo "playbook: "${{ github.event.inputs.playbook }}
           ansible-playbook -i inventories/${{ github.event.inputs.array }} {{ github.event.inputs.playbook }} -e "debug_mode={{ github.event.inputs.debug }}" --vault-password-file vault_pass.txt
           rm -f vault_pass.txt
