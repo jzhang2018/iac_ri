@@ -1,7 +1,7 @@
 ---
 
 # volume count to be created
-volume_count: 2
+volume_count: 1
 
 # size in GB for all the new volumes
 size: 16
