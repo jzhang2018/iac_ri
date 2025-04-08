@@ -8,7 +8,7 @@ on:
         required: true
         type: choice
         options:
-          - 'TBD'
+          - '000120003200'
 
       playbook:
         description: 'Select Ansible Playbook to run...'
