@@ -38,4 +38,5 @@
     success_msg: "This assertion passed!"
   loop:
     - { condition: "(vcenter_cluster_name + '_PG') == assert_pg.portgroup_details.portGroupId", msg: "port group name does not match expected value" }
-    - { condition: "(renamed_pg_ports | sort(attribute='directorId')) | difference (( assert_pg.portgroup_details['symmetrixPortKey'] | sort(attribute='directorId'))) | length == 0", msg: "ports do not match expected values" }
+    - { condition: "(renamed_pg_ports | sort(attribute='directorId')) | difference (( assert_pg.portgroup_details['symmetrixPortKey'] 
+        | sort(attribute='directorId'))) | length == 0", msg: "ports do not match expected values" }
