@@ -1,4 +1,4 @@
-name: Run Ansible Playbook
+name: Run Ansible Playbook for Prod Array
 
 on:
   workflow_dispatch:  # Allows manual triggering
