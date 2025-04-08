@@ -45,7 +45,8 @@
 - name: Create volume dict (key is wwn and value is volumeId-DATA.xx) for future reference
   ansible.builtin.set_fact:
     volume_dict: >-
-      {{ volume_dict | default({}) | combine({item.volume_details.wwn: item.volume_details.volumeId + '-' + item.volume_details.volume_identifier.split('_')[1]}) }}
+      {{ volume_dict | default({}) | combine({item.volume_details.wwn: item.volume_details.volumeId +
+      '-' + item.volume_details.volume_identifier.split('_')[1]}) }}
   loop: "{{ volumes_info.results }}"
 
 - name: Print out volume_dict

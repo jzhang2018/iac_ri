@@ -1,0 +1,58 @@
+name: Run Ansible Playbook for Prod Array
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+    inputs:
+      array:
+        description: 'Select storage array'
+        required: true
+        type: choice
+        options:
+          - '000120003200'
+
+      playbook:
+        description: 'Select Ansible Playbook to run...'
+        required: true
+        type: choice
+        options:
+          - 'create_hosts_hostgroup_playbook.yml'
+          - 'create_port_group_playbook.yml'
+          - 'create_storage_group_playbook.yml'
+          - 'create_volume_playbook.yml'
+          - 'create_maskingview_playbook.yml'
+          - 'create_esxi_host_datastore_playbook.yml'
+          - 'create_esxi_host_datastore_playbook.yml'
+          - 'add_volume_datastore_playbook.yml'
+
+      debug:
+        description: 'Playbook debug mode'
+        required: false
+        default: false
+        type: boolean
+        options:
+          - true
+          - false
+
+jobs:
+  ansible-playbook:
+    runs-on: self-hosted
+
+    steps:
+      - name: Check if it is main branch or realse tag
+        run: |
+          echo "Current ref: $GITHUB_REF"
+          if [[ "$GITHUB_REF" != "refs/heads/main" && "$GITHUB_REF" != refs/tags/* ]]; then
+            echo "Playbook for Prod array can only be run on 'main' or tags!"
+            exit 1
+          fi
+
+      - name: check code out from github into 'self-hosted' runner
+        uses: actions/checkout@v4.2.1
+
+      - name: Run Ansible Playbook
+        env:
+          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+        run: |
+          echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt
+          ansible-playbook -i inventories/${{ github.event.inputs.array }} ${{ github.event.inputs.playbook }} -e "debug_mode=${{ github.event.inputs.debug }}" --vault-password-file vault_pass.txt
+          rm -f vault_pass.txt

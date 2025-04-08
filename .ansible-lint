@@ -15,6 +15,5 @@ exclude_paths:
   - requirements.txt
   - test.yml
 
-skip_list:
-  - yaml[line-length]
-
+# skip_list:
+#   - yaml[line-length]
