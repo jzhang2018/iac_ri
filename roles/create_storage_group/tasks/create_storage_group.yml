@@ -16,9 +16,9 @@
   dellemc.powermax.storagegroup:
     <<: *uni_connection_vars
     sg_name: "{{ vcenter_cluster_name }}_SG"
-    # service_level: "Diamond"
-    # srp: "SRP_1"
-    # compression: true
+    service_level: "Diamond"
+    srp: "SRP_1"
+    compression: true
     state: 'present'
   register: create_sg
 
