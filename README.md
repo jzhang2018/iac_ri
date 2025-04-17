@@ -10,34 +10,34 @@ The usecases are:<br/>
 1. Create Hosts and Host Group<br/>
   -- It creates a new host group and adds hosts to it (configureed in inventory file group_vars/create_hosts_hostgroup/vars.yml)<br/>
   -- Run play book:<br/> 
-        ansible-playbook -i inventories/000120003200 create_hosts_hostgroup_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
+        ansible-playbook -i inventories/000220002205 create_hosts_hostgroup_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
 
 2. Create Storage Group<br/>
   -- It creates a new storage group and adds newly created volumes to it (configureed in inventory file group_vars/create_storage_group/vars.yml)<br/>
   -- Run play book:<br/> 
-        ansible-playbook -i inventories/000120003200 create_storage_group_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
+        ansible-playbook -i inventories/000220002205 create_storage_group_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
 
 3. Create Volume<br/>
   -- It creates volume(s) and adds them to storage group (configureed in inventory file group_vars/create_volume/vars.yml)<br/>
   -- Run play book:<br/> 
-        ansible-playbook -i inventories/000120003200 create_volume_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
+        ansible-playbook -i inventories/000220002205 create_volume_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
 
 4. Create Port Group<br/>
   -- It creates a new port group and adds existing ports to it (configureed in inventory file group_vars/port_group/vars.yml)<br/>
   -- Run play book:<br/> 
-        ansible-playbook -i inventories/000120003200 create_port_group_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
+        ansible-playbook -i inventories/000220002205 create_port_group_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
 
 5. Create Masking View<br/>
   -- It creates a new masking view with storage group, host group and port group (configureed in inventory file group_vars/create_maskingview/vars.yml)<br/>
   -- Run play book:<br/> 
-        ansible-playbook -i inventories/000120003200 create_maskingview_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
+        ansible-playbook -i inventories/000220002205 create_maskingview_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
 
 6. Create ESXi Host Datastore<br/>
   -- It creates ESXi host datastore after rescan (configureed in inventory file group_vars/create_esxi_host_datastore/vars.yml)<br/>
   -- Run play book:<br/> 
-        ansible-playbook -i inventories/000120003200 create_esxi_host_datastore_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
+        ansible-playbook -i inventories/000220002205 create_esxi_host_datastore_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
 
 7. Add volume(s) and create ESXi Host Datastore<br/>
   -- It adds volume(s) to the storage group and then creates ESXi host datastore after rescan (configureed in inventory file group_vars/add_volume_datastore/vars.yml)<br/>
   -- Run play book:<br/> 
-        ansible-playbook -i inventories/000120003200 add_volume_datastore_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>
+        ansible-playbook -i inventories/000220002205 add_volume_datastore_playbook.yml -e "debug_mode=true" --ask-vault-pass<br/>

@@ -22,7 +22,7 @@
 - name: Flatten and extract display_name values from cluster_host_disk_info
   ansible.builtin.set_fact:
     display_names: "{{ cluster_host_disk_info.hosts_disk_info | dict2items | map(attribute='value') | list |
-    flatten | selectattr('display_name', 'search', '\\(naa\\.') }}"
+     flatten | selectattr('display_name', 'search', '\\(naa\\.') }}"
 
 - name: Extract disks' naa into a list using regex
   ansible.builtin.set_fact:
