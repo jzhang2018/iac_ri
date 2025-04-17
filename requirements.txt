@@ -1,4 +1,4 @@
-# requirements for ansible-lint
+# dependencies
 ansible
 ansible-lint
 jmespath
